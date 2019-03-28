@@ -228,6 +228,17 @@
 <p>如果你在安装时没有设置好，使得没能成功安装，在安装之后的文件夹GSAS II里找到proxy文本文档，把里面内容都删了，之后保存，随后运行bootstrap的py程序即可。</p>
 <p>安装好后，把所在目录放到path里，之后用管理员权限的cmd去执行GSASII.py即可运行！！</p>
 <ul>
+<li>CMPR</li>
+</ul>
+<p>说到GSAS II就不得不说一下CMPR，这实际上是个数据转换工具，可获得一些需要的数据，以供使用GSAS进行精修。</p>
+<p>官网：<a href="https://subversion.xray.aps.anl.gov/CMPR/trunk/doc/cmpr.html" target="_blank" rel="noopener">https://subversion.xray.aps.anl.gov/CMPR/trunk/doc/cmpr.html</a></p>
+<ul>
+<li>JANA &amp; RIETAN-FP</li>
+</ul>
+<p>这两个都是XRD精修软件，前者源自欧洲，后者是日本的。精修还是需要自己看书或者看教程来学习的，至于软件则是有熟练的就好。因为我主要用GSAS，所以这俩就不多说了。</p>
+<p>JANA：<a href="http://jana.fzu.cz" target="_blank" rel="noopener">http://jana.fzu.cz</a></p>
+<p>RIETAN-FP：<a href="http://fujioizumi.verse.jp/download/download_Eng.html#opennewwindow" target="_blank" rel="noopener">http://fujioizumi.verse.jp/download/download_Eng.html#opennewwindow</a></p>
+<ul>
 <li>Pymol</li>
 </ul>
 <p>关于pymol也不用多说了，官网上也有下载，但是要钱。后来发现UCI有提供免费的pymol新版本的下载地址，就可以避免这个尴尬问题了。但是需要注意的是，pymol是一个开源软件，基于python2.7，当然也有python3.X版本，因此要注意自己所安装的python版本哦！！</p>
@@ -235,7 +246,48 @@
 <p>如果像我一样在安装VS2017或者其他什么软件的时候安装了3.X版本的python怎么办呢？？实际上很简单，在我的电脑-右键属性-环境变量设置里把这个python的path目录删除即可，然后换成我们所用的python2.X的目录。</p>
 <p>当下载好之后是个whl文件，这里就要将python安装目录下的scripts目录添加到系统环境变量path里，然后用管理员权限打开cmd，使用pip命令进行安装。</p>
 <ul>
+<li>AutoDock</li>
+</ul>
+<p>这是一个免费且开源的分子对接软件，构成是AutoDock和ADT（即AutoDockTools，实际上就是MGLTools），关于软件下载和官方的用户手册，官网都有。官网：<a href="http://autodock.scripps.edu" target="_blank" rel="noopener">http://autodock.scripps.edu</a></p>
+<p>这里说一下具体的安装，先安装AutoDock的程序包，安装目录中不得有中文，之后安装MGLTools，安装目录同样不得有中文。然后将AutoDock的安装目录添加到path里，随后用CMD执行autodock4.exe，返回扩展功能命令即说明安装成功。随后进入MGLTools的安装目录，打开里面的adt.bat，即可运行具有可视化窗口的AutoDock分子对接软件。一般情况下这个adt、pmv、cadd、vision等都会自己在桌面生成一个快捷方式。</p>
+<p>至于AutoDock的使用，还是需要自学，虽然B站上有视频，网上有不少教程，这里找个新手入门的：</p>
+<p>AutoDock实例教程：<a href="http://blog.sciencenet.cn/blog-3196388-1090023.html" target="_blank" rel="noopener">http://blog.sciencenet.cn/blog-3196388-1090023.html</a></p>
+<p><strong>这里补充一下，不存在软件报错问题！！一般报错要么是操作错误，要么是配体/受体没优化好！总之正常情况使用天然配体模拟都是正常的。</strong></p>
+<p>这里给出个硬件参考：我的电脑是i5-8300H的CPU，8G ddr4 RAM，跑上面这个分子对接例子，共50种可能性，跑了2.5小时，单个程序的CPU占用率在30%浮动。</p>
+<ul>
 <li>其他软件</li>
 </ul>
 <p>我天朝自有国情在此，除了各大微信公众号可以提供软件下载，这里推荐一个“软件学堂”的网站，里面基本所有科研软件的破解版本都有，并且有详细的安装教程，所有的下载源走百度云….</p>
-</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-03-22</span><i class="fa fa-tag"></i><a href="/tags/技术/" title="技术" class="tag">技术 </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://yoursite.com/2019/03/22/0x002/,猎风's Blog,Note of Machine Learning &amp; Rare Earth Chemistry（更新中）,;" class="fa fa-twitter"></a></div></div></div></div></div><div class="post"><div class="tags"><a href="/tags/技术/">技术</a></div><div class="post-nav"><a href="/2019/03/22/4/" class="next">大四学年の手账(更新中)</a></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2019/03/22/4/" title="大四学年の手账(更新中)" class="btn">下一篇</a></li></ul></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
+<h1 id="分子对接"><a href="#分子对接" class="headerlink" title="分子对接"></a>分子对接</h1><p>以Autodock为例，一般情况下在生物应用领域，我们合成了具体的小分子（无机或有机），并且找到了其所作用的蛋白质（大分子，充当受体）。而微观作用是难以表征的，其具体作用的可能性都是通过计算机仿真算出来的一个最具可能的结果。因此，分子对接技术就成为了材料应用领域的重要技术。</p>
+<p>而市面上众多的分子对接软件里，AutoDock是一个开源免费且使用广泛的！！这意味着学术使用并不会涉及版权问题且仿真结果也是具有广泛认可度的。缺点则是运算量太大，用个人电脑跑对接会很耗时间，当然这也是所有科学软件的通病。那么具体来说一下分子对接的操作步骤：</p>
+<ul>
+<li>受体/配体的分子</li>
+</ul>
+<p>一般从PDB数据库获取大分子（即所作用的蛋白质，通常也是受体），而小分子则是用chemdraw画出来，可是，一般情况下chemdraw画的分子式不一定与3D结构完全对应，且chemdraw无法保存为pdb格式。因此，通常在chemdraw画出配体小分子的分子式，再用chem3D打开，进行进一步修正，随后保存为pdb格式。如果是配位键（箭头）怎么办？？先在chem3D的chemdraw panel里直接把配位离子和所在位点用直线连接，随后对直线右键-single-dative即可。</p>
+<ul>
+<li>位点的选择</li>
+</ul>
+<p>直接用AutoDock打开配体和受体进行对接，一般情况下会报错！因为这是彼此都是独立的分子，其位点是未知的，可以理解为需要一个进行位点选择的预处理，这里使用Z-Dock网页程序进行，需要上传小分子pdb文件及学术邮箱来接收对接完的结果邮件。而收到的结果都是对接好的分子模型，但不一定是符合实验规律的！！因此，使用pymol将其受体、配体分开，分别储存为pdb格式，用于对接使用。</p>
+<ul>
+<li>分子对接</li>
+</ul>
+<p>这部分就完全参考AutoDock的对接操作，这里不细讲了。只是一般认为受体是刚性，配体是柔性的。另外也要选择算法，一般是遗传算法或模拟退火算法。虽然AutoDock一般采用一种算法。</p>
+<p>具体分子对接算法参考： <a href="http://www.sohu.com/a/202003514_99976553。" target="_blank" rel="noopener">http://www.sohu.com/a/202003514_99976553。</a></p>
+<p>AutoDock的算法具体有：Lamarckian GA（拉马克遗传算法）、Genetic Algorithm（遗传算法）、Simulated Annealing（模拟退火算法）、Local Search（局部搜索算法）、evaluate energy等方法</p>
+<p>这里要注意一下，如果你的PDB文件中有金属离子，那么需要在本地的AD4_parameters.dat中添加你的金属信息，否则会因为无法识别原子而报错。一般涉及到范德瓦尔斯方程的问题，自己计算就很不现实了，这里补充别人计算好的：</p>
+<p><a href="http://autodock.1369657.n2.nabble.com/ADL-Parameters-for-docking-with-metal-ions-in-receptor-td2505649.html" target="_blank" rel="noopener">http://autodock.1369657.n2.nabble.com/ADL-Parameters-for-docking-with-metal-ions-in-receptor-td2505649.html</a></p>
+<p><a href="https://www.researchgate.net/post/Can_anyone_provide_me_the_Autodock_AD4_parameters_for_metal_ions_like_Ti_Ag_Au_Cu_Co" target="_blank" rel="noopener">https://www.researchgate.net/post/Can_anyone_provide_me_the_Autodock_AD4_parameters_for_metal_ions_like_Ti_Ag_Au_Cu_Co</a></p>
+<p>在更改好parameter之后，记得在grid和dock之前，把AD4_parameters.dat文件放到所在目录，并在各自的parameter设置当中读取这个文件（如果读取成功但仍然显示失败，报错信息后有#，就打开源文件，在#前加空格），随后就可以对接了。</p>
+<p>当然，还有一种情况，是所生成的pdbqt文件缺失了金属离子，这也是因为无法识别而导致的，一般情况下直接手动改源文件添加即可！！</p>
+<p>最后推荐个比较实用的元素周期表查询网站：<a href="http://periodictable.com/index.html" target="_blank" rel="noopener">http://periodictable.com/index.html</a></p>
+<ul>
+<li>数据分析与画图</li>
+</ul>
+<p>AutoDock的对接结果，一般是会有50个结果，那么一般要怎么选择呢？？由于通常使用的是遗传算法，而AutoDock使用的又是半经验自由能评价函数，因此，只要使用能量评价即可。对于每一种结果，显示具体参数，会有以下几个Binding Energy（结合能）、Intermolecular Energy（分子间能）、Internal Energy（内能）、Torsional Energy（扭矩能）、Unbound Extended Energy。</p>
+<p>其中，Binding Energy=Intermolecular Energy +Internal Energy +Torsional Energy- Unbound Extended Energy,单位是kcal/mol。依据的评价函数是△G(bind)(评价函数)= △G(vdw)+△G(H-bond)+△G(ele)+△G(del-sol)+ △G(tor)。而Docked Energy: 对接能量＝分子间能量+分子内能量。一般来说只要结合能越负，其自发的可能性越大，类似吉布斯自由能理论。故可根据结合能去选出最具可能的对接情况。关于这一部分的具体讨论，参考：<a href="http://muchong.com/html/200807/876387.html" target="_blank" rel="noopener">http://muchong.com/html/200807/876387.html</a></p>
+<p>而画图则使用pymol，这部分就不细讲了，网上的教程很多。输出为png即可。</p>
+<h1 id="parrot上安装lammps"><a href="#parrot上安装lammps" class="headerlink" title="parrot上安装lammps"></a>parrot上安装lammps</h1><p>parrot基于Debian，而Ubuntu也基于Debian。从分子动力学仿真软件lammps的官方文档（<a href="https://lammps.sandia.gov/doc/Install_linux.html）上有这么一段描述：" target="_blank" rel="noopener">https://lammps.sandia.gov/doc/Install_linux.html）上有这么一段描述：</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A pre-built LAMMPS executable suitable for running on the latest Ubuntu Linux versions, can be downloaded as a Debian package. This allows you to install LAMMPS with a single command, and stay up-to-date with the current version of LAMMPS by simply updating your operating system.</span><br></pre></td></tr></table></figure></p>
+<p>并且还提到：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Thus it builds with FFTW3 and OpenMPI.</span><br></pre></td></tr></table></figure></p>
+<p>而FFTW3正好是parrot所自带的，因此，可确认在parrot上安装lammps是可以参考这部分文档来做的。</p>
+<p>未完待续….</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-03-29</span><i class="fa fa-tag"></i><a href="/tags/技术/" title="技术" class="tag">技术 </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://yoursite.com/2019/03/29/0x002/,猎风's Blog,Note of Machine Learning &amp; Rare Earth Chemistry（更新中）,;" class="fa fa-twitter"></a></div></div></div></div></div><div class="post"><div class="tags"><a href="/tags/技术/">技术</a></div><div class="post-nav"><a href="/2019/03/29/4/" class="pre">大四学年の手账(更新中)</a><a href="/2019/01/30/diary/" class="next">书单&amp;影评&amp;纪录片/galgameのlist</a></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2019/03/29/4/" title="大四学年の手账(更新中)" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2019/01/30/diary/" title="书单&amp;影评&amp;纪录片/galgameのlist" class="btn">下一篇</a></li></ul></div></div></div><script src="/js/jquery.js"></script><script src="/js/jquery-migrate-1.2.1.min.js"></script><script src="/js/jquery.appear.js"></script></body></html>
