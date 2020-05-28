@@ -1,0 +1,591 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#343536"><meta name="author" content="North Area"><meta name="copyright" content="North Area"><meta name="generator" content="Hexo 4.2.1"><meta name="theme" content="hexo-theme-yun"><meta name="description" content="Typecho被getshell之反思人的一生啊就是这么不可预料，一个人的命运，当然要靠自己奋斗，但是也要考虑历史的进程。所以对我来说这可能就是“历史的钦定”吧！当然这些都是后话了，关于最近Typecho爆出的两个漏洞，我不幸中枪。这其中主因在于自己，毕竟那台腾讯云一只在吃灰，日常也疏于维护，基本上是看都不看的状态，所以这次，关于这“历史的抉择”，我还是有必要好好记录一下！！ 0x00 背景 Ty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="后端&#x2F;运维技术笔记@2017~2020">
+<meta property="og:url" content="https://www.northarea.tech/0x001/index.html">
+<meta property="og:site_name" content="North Area">
+<meta property="og:description" content="Typecho被getshell之反思人的一生啊就是这么不可预料，一个人的命运，当然要靠自己奋斗，但是也要考虑历史的进程。所以对我来说这可能就是“历史的钦定”吧！当然这些都是后话了，关于最近Typecho爆出的两个漏洞，我不幸中枪。这其中主因在于自己，毕竟那台腾讯云一只在吃灰，日常也疏于维护，基本上是看都不看的状态，所以这次，关于这“历史的抉择”，我还是有必要好好记录一下！！ 0x00 背景 Ty">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-12T04:10:46.000Z">
+<meta property="article:modified_time" content="2020-05-25T13:40:33.555Z">
+<meta property="article:author" content="North Area">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary"><title>后端/运维技术笔记@2017~2020 | North Area</title><link rel="shortcut icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#343536"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="North Area"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"朔方北地","version":"0.7.2","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"algolia":{"appID":"KJS1WW3ION","apiKey":"2951b1111d2713b0c699bea4eef865e1","indexName":"hexo","hits":{"per_page":8},"labels":{"input_placeholder":"想要搜些什么？","hits_empty":"找不到您查询的内容: ${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><script src="//at.alicdn.com/t/font_1847023_bauj9w7d7jk.js" async></script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;family=Source+Code+Pro&amp;display=swap" media="none" onload="this.media='all'"><script src="//at.alicdn.com/t/font_1140697_4i778vmn3jg.js" async></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><div class="js-Pjax"></div><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle sidebar-toggle-fixed hty-icon-button"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="North Area"><img width="96" loading="lazy" src="https://avatars0.githubusercontent.com/u/3104820?s=460&amp;v=4" alt="North Area"></a><div class="site-author-name"><a href="/about/">North Area</a></div><a class="site-name" href="/about/site.html">North Area</a><sub class="site-subtitle">Study at JAIST.</sub><div class="site-desciption">一个苦逼的日本留学生</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="我的主页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item site-state-posts"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">17</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">7</span></a></div><a class="site-state-item hty-icon-button" href="/albums/" title="相册"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/liefneg" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:chnliefeng@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.weibo.com/5697878146" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=96885760" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/26092673" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.pixiv.net/users/21362852" title="Pixiv" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-pixiv"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://note.northarea.tech/" title="Note" target="_blank" style="color:#696a6b"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-Dyanjing"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/1073512358" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/northarea" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.instagram.com/hawksera" title="Instagram" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-instagram"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1073512358&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#e0dea4"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-men-line"></use></svg></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a></div></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Typecho被getshell之反思"><span class="toc-number">1.</span> <span class="toc-text">Typecho被getshell之反思</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#系统重置与hexo迁移"><span class="toc-number">2.</span> <span class="toc-text">系统重置与hexo迁移</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TERMUX上ssh、vim和渗透环境配置"><span class="toc-number">3.</span> <span class="toc-text">TERMUX上ssh、vim和渗透环境配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux下机器学习开发环境的配置"><span class="toc-number">4.</span> <span class="toc-text">Linux下机器学习开发环境的配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#浅谈暴力web攻击"><span class="toc-number">5.</span> <span class="toc-text">浅谈暴力web攻击</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#搭建本地git仓库"><span class="toc-number">6.</span> <span class="toc-text">搭建本地git仓库</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#win10-更新后WIFI无法链接的解决办法"><span class="toc-number">7.</span> <span class="toc-text">win10 更新后WIFI无法链接的解决办法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#git无法部署hexo的解决办法"><span class="toc-number">8.</span> <span class="toc-text">git无法部署hexo的解决办法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#WIN10内存占用过高的解决办法"><span class="toc-number">9.</span> <span class="toc-text">WIN10内存占用过高的解决办法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#给GITHUB-PAGES绑定域名"><span class="toc-number">10.</span> <span class="toc-text">给GITHUB PAGES绑定域名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基于MKDocs建立个人Wiki"><span class="toc-number">11.</span> <span class="toc-text">基于MKDocs建立个人Wiki</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Mkdocs支持markdown数学公式"><span class="toc-number">12.</span> <span class="toc-text">Mkdocs支持markdown数学公式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Zabbix-监控系统的搭建与应用（未完待续）"><span class="toc-number">13.</span> <span class="toc-text">Zabbix 监控系统的搭建与应用（未完待续）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#戴尔服务器出现-cpu0000-cpu2-internal-error-的解决办法"><span class="toc-number">14.</span> <span class="toc-text">戴尔服务器出现 cpu0000 cpu2 internal error 的解决办法</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.northarea.tech/0x001/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="North Area"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="North Area"></span><header class="post-header"><h1 class="post-title" itemprop="name headline" style="color: undefined">后端/运维技术笔记@2017~2020</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2020-04-12 12:10:46" itemprop="dateCreated datePublished" datetime="2020-04-12T12:10:46+08:00">2020-04-12</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2020-05-25 21:40:33" itemprop="dateModified" datetime="2020-05-25T21:40:33+08:00">2020-05-25</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">55k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">1:40</span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/" style="--text-color:#FB7299" itemprop="url" rel="index"><span itemprop="text">技术文档</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E6%8A%80%E6%9C%AF/" style="--text-color:#DD306A"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">技术</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content post-markdown"><h1 id="Typecho被getshell之反思"><a href="#Typecho被getshell之反思" class="headerlink" title="Typecho被getshell之反思"></a>Typecho被getshell之反思</h1><p>人的一生啊就是这么不可预料，一个人的命运，当然要靠自己奋斗，但是也要考虑历史的进程。所以对我来说这可能就是“历史的钦定”吧！当然这些都是后话了，关于最近Typecho爆出的两个漏洞，我不幸中枪。这其中主因在于自己，毕竟那台腾讯云一只在吃灰，日常也疏于维护，基本上是看都不看的状态，所以这次，关于这“历史的抉择”，我还是有必要好好记录一下！！</p>
+<p><strong>0x00 背景</strong></p>
+<p>Typecho是国内的一个经典、轻巧的开源博客系统。在10月底新版发布之前，已发布的正式版已经是很久没更新了，但就国内博客圈的使用率来说算是很有分量的一款程序，所以对此废话不多说。最近Typecho接连爆出2个严重漏洞！！使得很多站点受到影响，包括我也是<s>（服务器都被日成筛子了！）</s></p>
+<p>由于这次漏洞影响比较大，网上出现了不少关于漏洞的分析，其中也有一些阴谋论的推测（后来被证实是想多了，个人认为该文章作者并不是恶意揣测开发团队的意图，仅仅是沟通问题）。</p>
+<div class="tip">
+①知道创宇漏洞分析文档：https://paper.seebug.org/424/
+②核心开发者joyqi的回复：
+   V2EX： https://www.v2ex.com/t/401202
+   joyqi博客：https://joyqi.com/typecho/about-typecho-20171027.html
+③某造成误解的文章：https://mp.weixin.qq.com/s/IE9g6OqfzAZVjtag-M_W6Q
+</div>
+
+<p><strong>0x01 发现与分析确认</strong></p>
+<p>因为我日常也不怎么管理腾讯云主机，基本上就是吃灰状态，偶尔续续费什么的。直到某天我续费的时候提示说服务器被传木马了，在Typecho网站目录下多了一个zz.php。如此明显，初步分析是技术爱好者的“友情检测”，非勒索/恶意入侵。</p>
+<p>于是，首先查看服务器的安全策略，我记得上一次设置这个好像在买这台主机时候做的，之后就没再管过。结果看了一眼：</p>
+<ul>
+<li>内心OS：妈耶！！开放全部端口访问！！这TM的不明摆着要被日吗？？？！！</li>
+</ul>
+<p>于是乎，马上删掉了安全策略，只留下开放22端口。随后，用winscp连接服务器，通过查询最后修改日期，发现网站根目录下有一个zz.php的一句话木马，而phpmyadmin目录下有一个cgi-149.php是被修改过。虽然数据库还在，但是很有可能已经被脱裤了，万幸的是我那个吃灰站点也没什么数据价值，对个人来说影响不大</p>
+<p>不过接下来我担心的就是这个大马的提权程度，是否已经拿下Linux下的更高权限呢？？我从腾讯云的控制台查看操作记录，显示：没有！！这就说明一定是被删记录了！！用putty连接到主机，查看最后执行命令，发现2个令人可悲的记录：</p>
+<pre class=" language-javascript"><code class="language-javascript">  cat <span class="token keyword">default</span><span class="token punctuation">.</span>pass
+  mysql <span class="token operator">-</span>u root <span class="token operator">-</span>p</code></pre>
+<p>emmmm看来很有可能被脱裤了，因为在成功进行Linux提权之后一般是可以直接通过webshell来执行命令的，接下来要检查的是主机有没有异常登录：命令查看了以下日志：</p>
+<ul>
+<li>/var/log/message </li>
+<li>/var/log/secure </li>
+</ul>
+<p>发现在最后修改日期之前的记录完全没有！！这说明是被清理痕迹了！！也解释了为什么腾讯云后台记录没有日志。由此可以判定：已经被提权，并且是较高权限，数据库被脱裤的可能性极大！！</p>
+<p>但是即使这样也没办法确认入侵者到底有没有拿下服务器密码（比如新增一个用户并且给予root权限，这样所获得的权限等同于拿下root账户和密码）</p>
+<p>但是通过命令</p>
+<pre class=" language-javascript"><code class="language-javascript">last <span class="token operator">-</span>f <span class="token operator">/</span><span class="token keyword">var</span><span class="token operator">/</span>log<span class="token operator">/</span>wtmp</code></pre>
+<p>发现之前没有异常登录！由于这个日志理论上是永久性记录的，所以可信度极高。又输入</p>
+<pre class=" language-javascript"><code class="language-javascript">cat <span class="token operator">/</span>etc<span class="token operator">/</span>group</code></pre>
+<p>发现也没有异常的用户/用户组，所以可以确定：对方只是成功提权，删了webshell之后他就没有权限了！而关于数据库的问题，反正没什么重要数据何况密码什么的都是程序自己生成的那些！所以并无太大影响！！</p>
+<p><strong>0x02 处理</strong></p>
+<p>这还能怎么处理？后话再说，这里就只做了应急处理！即：</p>
+<ul>
+<li>删除webshell</li>
+<li>重新配置服务器端口的安全策略</li>
+</ul>
+<p>关于要不要开<strong>蜜罐</strong>这个问题，我觉得人家都那么明显的去提示你留下木马了，也仅仅是个友情检测，并非深仇大恨不至于开个蜜罐故意抓人。但这一次的经历是要当作教训的！！</p>
+<p><strong>0x03 后话</strong></p>
+<p>经历了这次被黑得最惨的“入侵”，基本上对动态网站无爱了，考虑到这台腾讯云主机的实际使用情况，计划直接重装然后拿来做测试和展示平台，也会搭建一些环境用于程序/漏洞测试，但为了在学校那边装个样子，应该会建个ghost站点作为展示站点。</p>
+<p>关于这次经历，一方面感谢国内各大安全团队提供漏洞分析与解决建议，另一方面则是对Typecho开发团队及时提供解决方案表示感谢，毕竟这个圈子的维护，眼下也是越来越难了。</p>
+<p>而对我自己来说，完全就像回到过去一样，这大概就是命运的“钦定”，让我回归一个纯粹的技术爱好者，涉足开发与运维，也要尝试一下CTF。</p>
+<h1 id="系统重置与hexo迁移"><a href="#系统重置与hexo迁移" class="headerlink" title="系统重置与hexo迁移"></a>系统重置与hexo迁移</h1><p>因为win10坑爹的自动更新忘关了！所以在不知不觉当中它就给我更新了，然而每次系统盘更新都很恶心，日常eclipse因为JDK环境（安装在C盘）迷之缺失不能用还好说，毕竟我不是Java开发者，但是这次竟然让Node.js环境给和谐了！！所以我相当于数据完全丢失！！！本来想关机过几天再搞，却发现这个系统有问题不能关机！！或者说关不了机！！那就呵呵了，利用win10唯一一个比较人性化的设置——重置电脑来实现近似重装系统（效果上完全一样）</p>
+<p>就这样，我翘了一节课，花了10小时时间成功重置电脑，并且又花了4小时去清理磁盘（200G的旧文件），让电脑变得“崭新”，就关了win10自动更新，依次去装那些常用软件，这些就不具体说了，下面讲一下重头戏：</p>
+<p><strong>新电脑上hexo的迁移</strong></p>
+<p>首先！！安装Node.js环境并且</p>
+<pre class=" language-javascript"><code class="language-javascript"> npm install <span class="token operator">-</span>g hexo</code></pre>
+<p>这个过程可能会非常漫长，并且会“报错”：</p>
+<pre class=" language-javascript"><code class="language-javascript"> npm WARN deprecated swig@<span class="token number">1.4</span><span class="token punctuation">.</span><span class="token number">2</span><span class="token punctuation">:</span> This <span class="token keyword">package</span> is no longer maintained</code></pre>
+<p>实际上是网速太慢，仍然在自动安装！等就行了！一定要等待！一定要等待！一定要等待！直到提示安装成功！！当然如果速度真的受不了，可以改npm源为淘宝源，具体怎么做这里就不具体说了。</p>
+<p>下一步，Git bash 进入你存放hexo的目录，提前将备份好的这几个文件粘贴到里面！！注意仅仅要这几个！其他都！不！要！</p>
+<pre class=" language-javascript"><code class="language-javascript">  _config<span class="token punctuation">.</span>yml
+ <span class="token keyword">package</span><span class="token punctuation">.</span>json
+ scaffolds<span class="token operator">/</span>
+ source<span class="token operator">/</span>
+ themes<span class="token operator">/</span></code></pre>
+<p>之后</p>
+<pre class=" language-javascript"><code class="language-javascript">npm install</code></pre>
+<p>这里也只要等待！！接下来就可以按照之前使用hexo的方式来使用了，相当于迁移成功！！但是，这个时候部署，Git 会要求确认你的身份！这里按照GitHub上的信息来写就行了，命令如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">  git config <span class="token operator">--</span>global user<span class="token punctuation">.</span>email  <span class="token string">"you@example.com"</span>
+
+  git config <span class="token operator">--</span>global user<span class="token punctuation">.</span>name <span class="token string">"Your Name"</span></code></pre>
+<p>之后</p>
+<pre class=" language-javascript"><code class="language-javascript">hexo deploy</code></pre>
+<p>会弹出一个GitHub的登录窗口，登录即可！因为这时你并没有之前的残余文档，即public文件夹，所以直接部署即可。</p>
+<p>之后，去验证一下是否部署成功，如果网站更新正常，即认为hexo迁移成功！！</p>
+<p><strong>注意！！！如果再次出现node命令无法使用，重新配置系统环境变量即可！！</strong></p>
+<p>最后再给出2个hexo插件：<a href="https://github.com/MoePlayer/hexo-tag-aplayer" target="_blank" rel="noopener">hexo-tag-aplayer</a>、<a href="https://github.com/MoePlayer/hexo-tag-dplayer" target="_blank" rel="noopener">hexo-tag-dplayer</a></p>
+<h1 id="TERMUX上ssh、vim和渗透环境配置"><a href="#TERMUX上ssh、vim和渗透环境配置" class="headerlink" title="TERMUX上ssh、vim和渗透环境配置"></a>TERMUX上ssh、vim和渗透环境配置</h1><p>关于termux就不用多说了，安卓上少有的神器，对于运维党来说算是必备品！！但是要注意这玩意儿的安装目录就是系统根目录！！<strong>所以会有很严重的权限限制！！对于一些操作要谨慎！！不然就只能清除数据了！！</strong></p>
+<ul>
+<li>设备：Yoga Book</li>
+</ul>
+<p>每次启动建议先更新源，同时升级软件包</p>
+<pre class=" language-javascript"><code class="language-javascript">apt update
+apt upgrade</code></pre>
+<p>或直接</p>
+<pre class=" language-javascript"><code class="language-javascript">apt update <span class="token operator">&amp;&amp;</span> apt upgrade</code></pre>
+<p>其他常用命令如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">apt install <span class="token operator">&lt;</span><span class="token keyword">package</span><span class="token operator">></span>         安装软件包
+apt show  <span class="token operator">&lt;</span><span class="token keyword">package</span><span class="token operator">></span>           显示软件包的信息
+apt list <span class="token punctuation">[</span><span class="token operator">--</span>installed<span class="token punctuation">]</span>        列出所有（或已安装）的软件包信息
+apt remove <span class="token operator">&lt;</span><span class="token keyword">package</span><span class="token operator">></span>          删除软件包
+chmod                         修改文件权限
+chown                         修改文件归属</code></pre>
+<p>为了一次性直接装了所有要安装的包，如安装package1~3这3个包，可以用这个命令，就是并列之后加-y：</p>
+<pre class=" language-javascript"><code class="language-javascript">apt install <span class="token operator">&lt;</span>package1<span class="token operator">></span> <span class="token operator">&lt;</span>package2<span class="token operator">></span> <span class="token operator">&lt;</span>package3<span class="token operator">></span> <span class="token operator">-</span>y</code></pre>
+<p>由于是Linux模拟终端，完全按Linux的套路来就行，国内网慢可以改用清华的源，大部分使用方法在termux官网上都有教程（英文），所以具体的这里就不多说了。演示日常装逼，使用cmatrix命令（前提是你装好了这个命令）</p>
+<pre><code>apt install cmatrix</code></pre><p>同样的，装逼还有一个命令sl，怎么安装和运行完全同上。至于美化可以用zsh，但是我这个平板就比较方便，不需要这个了。感兴趣可以具体参考zsh的wiki</p>
+<p><strong>配置ssh</strong></p>
+<p>为什么要配置ssh？因为yoga book作为我的主力平板（实际上是嫌15.6的Acer太重了），在日常当中一直充当超级本（即使它是Android系统，但是超薄超轻真的方便太多！！）用于技术演示和应急维护，作为运维的一员，自然不必说ssh的重要性，配置ssh所实现的功能有2个：</p>
+<ul>
+<li>使用yoga book上的termux连接到服务器终端</li>
+<li>使用其他终端连接到termux终端</li>
+</ul>
+<p>先说第一个，以阿里云/腾讯云为例，可以在官网的控制台查看外网ip，当然我绑定域名之后直接ping一下域名更方便</p>
+<pre class=" language-javascript"><code class="language-javascript">ping <span class="token operator">-</span>c <span class="token number">1</span> https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>liefeng<span class="token punctuation">.</span>github<span class="token punctuation">.</span>io </code></pre>
+<p>这样获取返回的外网ip，可以使用termux通过ssh连接主机终端。首先，termux安装sshd</p>
+<pre class=" language-javascript"><code class="language-javascript">apt install sshd</code></pre>
+<p>之后像使用putty一样连接主机终端就可以了，如以root账户连接ip为127.0.0.1的主机终端：</p>
+<pre class=" language-javascript"><code class="language-javascript">sshd <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span> <span class="token operator">-</span>lroot</code></pre>
+<p>这样的好处是对于我这种只能带着安卓平板（yoga book）到处跑的人来说，随时可以连接到主机进行配置/维护，同时也意味着远程连接着一台真·Linux主机，在某些时候能弥补Android平台限制的技术问题。</p>
+<p>关于第二个，实际上对我来说没啥用。为了方便其他终端也能管理termux终端（实际上是因为安卓手机编程太蛋疼了！），在安装openssh之后使用JuiceSSH连接termux终端，电脑端可以用xshell连接（可以本地连接本地，毕竟Android手机用这个很麻烦，当然我yoga book自带灵光键盘不存在这个问题哦！），之后使用JuiceSSH提取密钥，毕竟termux不支持账户密码验证！！当然连接时注意端口！termux的ssh端口默认是8022，当然可以先自己查看一下！<br>安装openssh：</p>
+<pre class=" language-javascript"><code class="language-javascript">apt install openssh</code></pre>
+<p>查看sshd服务端口：</p>
+<pre class=" language-javascript"><code class="language-javascript">netstat <span class="token operator">-</span>ntlp <span class="token operator">|</span>grep sshd</code></pre>
+<p>当然openssh也是支持通过ssh连接其他终端的，语法为：</p>
+<pre class=" language-javascript"><code class="language-javascript">ssh 用户名@主机地址</code></pre>
+<p><strong>配置vim</strong><br>关于这里就完全是Linux配置vim的套路了，所以我真的不想写些什么了，毕竟用Google搜索任一“Linux+vim配置”的文章都比我写得好，写得全面！何况相对于vim本身，配置开发环境更为重要！毕竟vim配置的目的还是作为IDE来用。这里，说一下termux上所集成的语言包和其他必要包：</p>
+<pre class=" language-javascript"><code class="language-javascript">python         默认安装的是Python3
+python2        这个才是python2<span class="token number">.7</span>
+clang          大名鼎鼎的c<span class="token operator">++</span> 编译器
+vim            这个就不用多少了，termux自带的是vi
+git            这个码农都懂的
+htop           任务管理器
+tree           目录树
+make           这个很重要，如果安装第三方包的话
+irssi          irc客户端<span class="token punctuation">,</span>命令行聊天软件
+wget           更不用说了
+openssl        ssh，这个之前说过了
+tar            想必这个也不用多说</code></pre>
+<p>总之，有什么需要的直接输入</p>
+<pre class=" language-javascript"><code class="language-javascript">apt list</code></pre>
+<p>就可以了，对着列表安装自己所需要的。回到VIM配置的问题，如果你需要配置vim，只需在Home目录创建一个~/.vimrc文件即可以配置vim了，然而termux的vim自带该文件，就是配置写入有点问题（实际上还是权限问题！何况我是x86！！）所以既然对我来说足够用，那么就不多说了，具体建议参考这篇文章：<br><a href="https://github.com/yangyangwithgnu/use_vim_as_ide" target="_blank" rel="noopener">https://github.com/yangyangwithgnu/use_vim_as_ide</a></p>
+<p><strong>配置渗透环境</strong></p>
+<p>这里为了图方便，直接把所有基础包直接安装，大小约122MB。如果你的termux是第一次使用，可以直接复制我的安装命令：</p>
+<pre class=" language-javascript"><code class="language-javascript">apt install git wget vim nano tar less nmap openssh hydra python2 <span class="token operator">-</span>y</code></pre>
+<p>nmap，openssh，hydra算是环境的一部分，具体怎么用问Google。之后就是安装其他的环境包：BBScan，subDomainsBrute，RouterSploit，whatportis和sqlmap,具体怎么用依然问Google，总之安装玩就算环境搭建成功，用法问Google！！！<br>安装sqlmap,BBScan，subDomainsBrute和RouterSploit；提示缺失python扩展包，直接用</p>
+<pre class=" language-javascript"><code class="language-javascript">pip2 install <span class="token operator">&lt;</span>对应扩展包<span class="token operator">></span></code></pre>
+<pre class=" language-javascript"><code class="language-javascript">git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>sqlmapproject<span class="token operator">/</span>sqlmap<span class="token punctuation">.</span>git
+git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>lijiejie<span class="token operator">/</span>BBScan<span class="token punctuation">.</span>git
+git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>y1ng1996<span class="token operator">/</span>lijiejie_subDomainsBrute<span class="token punctuation">.</span>git
+git clone https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>reverse<span class="token operator">-</span>shell<span class="token operator">/</span>routersploit
+pip2 install requests</code></pre>
+<p>再安装whatportis</p>
+<pre class=" language-javascript"><code class="language-javascript">pip2 install whatportis</code></pre>
+<p>这样一个基础的渗透环境就配置好了，起码比N年前那种所谓Android渗透包（基本上都要root才能用）要好！！至于用法有不会的就Google！！有不会的就Google！有不会的就Google！重要的事情说三遍！！总之熟能生巧！！！</p>
+<h1 id="Linux下机器学习开发环境的配置"><a href="#Linux下机器学习开发环境的配置" class="headerlink" title="Linux下机器学习开发环境的配置"></a>Linux下机器学习开发环境的配置</h1><p>关于这个环境，我是准备拿来做计算的，毕竟搞工业仿真，如果一直在本机上测试那么我电脑直接捐了算了！！何况让服务器一直吃灰成何体统！！<s>毕竟是已经续费到毕业的！不得不用！！</s></p>
+<ul>
+<li>设备：阿里云ECS</li>
+<li>执行终端：YogaBook（基于termux模拟终端）、Windows10</li>
+</ul>
+<p>首先去下载Anaconda2，因为我的ECS是在青岛机房，而众所周知的一些原因，从官网上下载会导致速度特别特别慢，这个时候推荐从清华大学的镜像源下载。由于使用python2.7，就下载对应的Anaconda2-5.0.1。</p>
+<p>如果你不确定选择什么版本，可以先查看一下系统信息</p>
+<pre class=" language-javascript"><code class="language-javascript">uname <span class="token operator">-</span>a</code></pre>
+<p>我选择Anaconda2-5.0.1-Linux-x86_64.sh。并且创建一个Anaconda目录用于存放下载和安装，当然你也可以下载到根目录。</p>
+<p>cd 到Anaconda目录，执行下载，不得不说国内的源下载速度是非常快的！！35mb/s</p>
+<pre class=" language-javascript"><code class="language-javascript">wget https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>mirrors<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>anaconda<span class="token operator">/</span>archive<span class="token operator">/</span>Anaconda2<span class="token number">-5.0</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token operator">-</span>Linux<span class="token operator">-</span>x86_64<span class="token punctuation">.</span>sh</code></pre>
+<p>下载好之后执行安装，整个过程就是按几下Enter,输入几次yes。如果你的命令行卡在下载命令上了，记得先退出再安装！</p>
+<pre class=" language-javascript"><code class="language-javascript">bash Anaconda2<span class="token number">-5.0</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token operator">-</span>Linux<span class="token operator">-</span>x86_64<span class="token punctuation">.</span>sh</code></pre>
+<p>安装完之后记得添加环境变量！实际上安装过程中会自己问，可以选择yes</p>
+<p>之后就是检测一下能不能用，输入python看是否能返回python。但是输入conda、jupyter一类的却返回command not found，解决方法是把anaconda2/bin这个目录添加到环境变量就好了(具体操作看安装目录，默认安装目录是在~下)</p>
+<pre class=" language-javascript"><code class="language-javascript">echo <span class="token string">'export PATH="~/anaconda2/bin:$PATH"'</span> <span class="token operator">></span><span class="token operator">></span> <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc</code></pre>
+<p>更新path以立即生效</p>
+<pre class=" language-javascript"><code class="language-javascript">source <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc</code></pre>
+<p>这时再输入那些命令就可以执行了！因为深度学习环境需要一些开源模块，尤其是依托于Scikit-Learn，这时候就需要自己手动去安装了，可以使用pip或者conda。当然Numpy ,Scipy ,Matplotlib这些包也是必须的！！剩下的包就随用随加。</p>
+<pre class=" language-javascript"><code class="language-javascript">conda install scipy
+conda install theano
+conda install keras
+pip install tensorflow
+pip install sklearn
+pip install numpy
+pip install matplotlib</code></pre>
+<p>但是还有一个问题是Anaconda官网因为众所周知的原因国内访问慢的要死，这个时候还是改用国内的源更方便一些！！</p>
+<p>添加Anaconda的TUNA镜像</p>
+<pre class=" language-javascript"><code class="language-javascript">conda config <span class="token operator">--</span>add channels https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>mirrors<span class="token punctuation">.</span>tuna<span class="token punctuation">.</span>tsinghua<span class="token punctuation">.</span>edu<span class="token punctuation">.</span>cn<span class="token operator">/</span>anaconda<span class="token operator">/</span>pkgs<span class="token regex">/free/</span></code></pre>
+<p>设置搜索时显示通道地址</p>
+<pre class=" language-javascript"><code class="language-javascript">conda config <span class="token operator">--</span><span class="token keyword">set</span> show_channel_urls yes</code></pre>
+<p>这个时候可以考虑配置jupyter了，首先要测试一下环境</p>
+<pre class=" language-javascript"><code class="language-javascript">jupyter notebook</code></pre>
+<p>环境没问题就先来配置ipython，输入：</p>
+<pre class=" language-javascript"><code class="language-javascript">ipython profile create</code></pre>
+<p>然后</p>
+<pre class=" language-javascript"><code class="language-javascript">cd <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>ipython<span class="token regex">/profile_default/</span></code></pre>
+<p>对生成的2个文件进行编辑，使用方法是先键入</p>
+<pre class=" language-javascript"><code class="language-javascript">c <span class="token operator">=</span> <span class="token function">get_config</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>再查找到c.InteractiveShellApp.exec_lines语句，在[]里键入常用的模块，我以自己的为例</p>
+<pre class=" language-javascript"><code class="language-javascript"> <span class="token string">"import pandas as pd"</span><span class="token punctuation">,</span><span class="token string">"import numpy as np"</span><span class="token punctuation">,</span><span class="token string">"import scipy.stats as spstats"</span><span class="token punctuation">,</span> <span class="token string">"import scipy as sp"</span></code></pre>
+<p>因为过多的导入会影响ipython的开启速度，这里就自己斟酌吧。</p>
+<p>接下来，为了能够远程访问我这台ECS上的jupyter notebook，要进行最恶心的设置了。首先，为了保证能够完美设置，确认写入path环境之后重启ECS，之后，输入</p>
+<pre class=" language-javascript"><code class="language-javascript">jupyter notebook <span class="token operator">--</span>generate<span class="token operator">-</span>config</code></pre>
+<p>而root会报错，要求加入-allow-root再执行，所以</p>
+<pre class=" language-javascript"><code class="language-javascript">jupyter notebook <span class="token operator">--</span>generate<span class="token operator">-</span>config <span class="token operator">--</span>allow<span class="token operator">-</span>config</code></pre>
+<p>执行成功会显示：</p>
+<pre class=" language-javascript"><code class="language-javascript">Writing <span class="token keyword">default</span> config to<span class="token punctuation">:</span> <span class="token regex">/root/</span><span class="token punctuation">.</span>jupyter<span class="token operator">/</span>jupyter_notebook_config<span class="token punctuation">.</span>py</code></pre>
+<p>反之报错，重复上述步骤直至成功，一般重启服务器即可。既然生成了配置文件，接下来设置个密码，为了方便起见建议用ipython手动设置！！即先输入</p>
+<pre class=" language-javascript"><code class="language-javascript">ipython</code></pre>
+<p>进入ipython，然后配置自己的密码</p>
+<pre class=" language-javascript"><code class="language-javascript">In <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token keyword">from</span> notebook<span class="token punctuation">.</span>auth <span class="token keyword">import</span> passwd
+In <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token function">passwd</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+Enter password<span class="token punctuation">:</span>
+Verify password<span class="token punctuation">:</span></code></pre>
+<p>回车，之后会返回一串密文，即Out[2]:那个。这个时候配置jupyter_notebook_config.py</p>
+<pre class=" language-javascript"><code class="language-javascript">vim jupyter_notebook_config<span class="token punctuation">.</span>py</code></pre>
+<p>找到,去掉注释#，然后按自己情况编辑</p>
+<pre class=" language-javascript"><code class="language-javascript">c<span class="token punctuation">.</span>NotebookApp<span class="token punctuation">.</span>ip<span class="token operator">=</span><span class="token string">'*'</span>
+c<span class="token punctuation">.</span>NotebookApp<span class="token punctuation">.</span>password <span class="token operator">=</span> u<span class="token string">'sha:ce...刚才复制的那个密文'</span>
+c<span class="token punctuation">.</span>NotebookApp<span class="token punctuation">.</span>open_browser <span class="token operator">=</span> False
+c<span class="token punctuation">.</span>NotebookApp<span class="token punctuation">.</span>port <span class="token operator">=</span><span class="token number">8888</span> #可自行指定一个端口<span class="token punctuation">,</span> 访问时使用该端口</code></pre>
+<p>因为这个文件大概600+行代码，建议用:?keyword 来查找。之后在非隐藏目录，启动jupyter notebook</p>
+<pre class=" language-javascript"><code class="language-javascript">jupyter notebook </code></pre>
+<p>若是root用户，则执行</p>
+<pre class=" language-javascript"><code class="language-javascript">jupyter notebook <span class="token operator">--</span>allow<span class="token operator">-</span>root</code></pre>
+<p>然后ip:端口号即可使用jupyter，实际上域名：端口号也可以。记得在安全组的公网入方向添加这个端口</p>
+<p><strong>但是这样又爆出了一个严峻问题，就是我是用root用户的，而jupyter是整个服务器的目录都能读取并且按照操作用户的权限来执行，所以一旦密码被破解我的服务器就会被日！！！因此要考虑一下安全问题：</strong></p>
+<ul>
+<li>不到用的时候不要开启jupyter</li>
+<li>设置超级复杂的密码</li>
+<li>第三方安全软件监视端口</li>
+</ul>
+<h1 id="浅谈暴力web攻击"><a href="#浅谈暴力web攻击" class="headerlink" title="浅谈暴力web攻击"></a>浅谈暴力web攻击</h1><p>关于这个傻逼问题还是和阿里云有关。因为web应用防火墙，后台总是会看到一些“奇奇怪怪”的攻击记录，其中最多的就是脚本木马、上传漏洞类型的暴力攻击。</p>
+<ul>
+<li>首先看一下我的服务器安全组配置：公网出全部端口，公网入21/22/80/443端口</li>
+<li>其次，统计一下请求方式：POST、PUT、GET</li>
+<li>没有发现有CSRF攻击的记录</li>
+</ul>
+<p>从上面的信息可以看出端口限制基本上是死的，对于80端口入侵，可行性最高的就是跑GCI，使用比较无脑的GCI扫描器进行穷举。对于21/22端口入侵，FTP就算了，我服务器上FTP服务是死的。而22端口，除非拿下我的账户密码直接ssh，否则入侵成功的几率是不存在的！443就算了。</p>
+<p>那么从HTTP协议来看，实际的安全性如何：</p>
+<ul>
+<li>GET (选择)：从服务器上获取一个具体的资源或者一个资源列表。</li>
+<li>POST （创建）： 在服务器上创建一个新的资源。</li>
+<li>PUT （更新）：以整体的方式更新服务器上的一个资源。</li>
+</ul>
+<p>关于具体的就不说了，实际应用当中都是一些嗅探手段，用于垃圾扫描。<strong>毕竟当下做SQL注入也是特别难的。</strong>从日志里看，这类请求无非是检测是否存在某目录文件。但是这一引出了一个大的问题——<strong>漏洞利用</strong>。HTTP协议，win10下可以使用telnet命令（在系统中手动开启这个命令才能用）。更具体的说明详见<a href="https://klionsec.github.io/2017/06/18/http-basic/" target="_blank" rel="noopener">从入侵者的眼中去理解 http 协议</a></p>
+<p>如上所述，从注入角度看基本上是攻不进来的，但是一旦自身内部有问题，存在漏洞就不好说了。关于漏洞影响这里不多说，而且给出的建议也很简单却很难做好：</p>
+<ul>
+<li>合理配置服务/端口与权限</li>
+<li>关注安全信息，及时更新软件，打补丁</li>
+<li>使用第三方高效的服务器安全软件</li>
+</ul>
+<h1 id="搭建本地git仓库"><a href="#搭建本地git仓库" class="headerlink" title="搭建本地git仓库"></a>搭建本地git仓库</h1><p>centos搭git仓库很别扭，而且….虽然是为了技术验证，但讲道理这个不如QQ群的群共享好用（如果是短期项目的话）</p>
+<ul>
+<li>设备：阿里云ECS（吃灰中）</li>
+</ul>
+<p>首先通过yum源下载安装git</p>
+<pre class=" language-javascript"><code class="language-javascript">yum install <span class="token operator">-</span>y git</code></pre>
+<p>安装之后会在/home/目录下生成一个git目录，但相关操作之后再说。首先添加个用户（这里用户名为git），并且为之设置密码</p>
+<pre class=" language-javascript"><code class="language-javascript">adduser git
+passwd git</code></pre>
+<p>下一步，我们在/home/git/目录下建立一个子目录，作为git仓库目录。因为是给美赛准备的，我这里就是mcm</p>
+<pre class=" language-javascript"><code class="language-javascript">mkdir <span class="token operator">/</span>home<span class="token operator">/</span>git<span class="token operator">/</span>mcm</code></pre>
+<p>接下来给予用户组和775权限：</p>
+<pre class=" language-javascript"><code class="language-javascript">sudo chown git<span class="token punctuation">:</span>git <span class="token operator">/</span>home<span class="token operator">/</span>git<span class="token operator">/</span>mcm
+sudo chmod <span class="token number">755</span> <span class="token operator">/</span>home<span class="token operator">/</span>git<span class="token operator">/</span>mcm</code></pre>
+<p>到这一步，基本上就配置完了，接下来切换到git用户组，在mcm目录下创建仓库即可</p>
+<pre class=" language-javascript"><code class="language-javascript">su git
+cd <span class="token operator">/</span>home<span class="token operator">/</span>git<span class="token operator">/</span>mcm</code></pre>
+<p>这里我建立一个仓库名为mcm的仓库</p>
+<pre class=" language-javascript"><code class="language-javascript">git init <span class="token operator">--</span>bare mcm<span class="token punctuation">.</span>git</code></pre>
+<p>至此，git仓库搭建与配置结束（结束了？？是我懒得搞那些没用的权限设置，尤其是我习惯用shell！！何况用ssh来使用对我的队友极其不方便！！），马上打开git bash验证一下：</p>
+<pre class=" language-javascript"><code class="language-javascript"> git clone git@ECS的ip<span class="token punctuation">:</span><span class="token operator">/</span>home<span class="token operator">/</span>git<span class="token operator">/</span>mcm<span class="token operator">/</span>mcm<span class="token punctuation">.</span>git</code></pre>
+<p>输入yes之后，返回</p>
+<pre class=" language-javascript"><code class="language-javascript">warning<span class="token punctuation">:</span> You appear to have cloned an empty repository<span class="token punctuation">.</span></code></pre>
+<p>到这里一切都ok了，虽然感觉使用起来然并卵。关于上传项目参考git上传仓库（感觉这样给队友用只会给她们增加压力XD）。当然，如果你是作大型的自建仓库使用，建议用<strong>Gogs或者GITLAB</strong>，当然我这里自用就用不着这么上纲上线的程序了。</p>
+<h1 id="win10-更新后WIFI无法链接的解决办法"><a href="#win10-更新后WIFI无法链接的解决办法" class="headerlink" title="win10 更新后WIFI无法链接的解决办法"></a>win10 更新后WIFI无法链接的解决办法</h1><p>一般来说都说win10强制更新导致的，首先先手动关闭自动更新（虽然然并卵）：</p>
+<ul>
+<li>win+R，输入services.msc，找到Windows Update，手动关闭。</li>
+</ul>
+<p>之后，打开控制面板，网络和Internet-查看网络状态和任务-更改适配器设置-WLAN-右键，属性-Microsoft网络客户端-配置-驱动程序-更新驱动程序-浏览计算机以查找驱动软件-从计算机的设备驱动程序列表中选取-Qualcomm Atheros AR9485 无线网络适配器-下一步</p>
+<p>以上，解决问题。</p>
+<h1 id="git无法部署hexo的解决办法"><a href="#git无法部署hexo的解决办法" class="headerlink" title="git无法部署hexo的解决办法"></a>git无法部署hexo的解决办法</h1><p>最近部署hexo会报错</p>
+<pre class=" language-javascript"><code class="language-javascript">fatal<span class="token punctuation">:</span> HttpRequestException encountered<span class="token punctuation">.</span></code></pre>
+<p>提示连接不到GitHub，Google了一下，据说是因为Github最近停用了TLS 1.0和v 1.1导致的，但是呢感觉是慢性发作….</p>
+<p>解决方法也很简单，把_comfig.yml中的repo由</p>
+<pre class=" language-javascript"><code class="language-javascript">https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>examplename<span class="token operator">/</span>examplename<span class="token punctuation">.</span>github<span class="token punctuation">.</span>io<span class="token punctuation">.</span>git</code></pre>
+<p>改为</p>
+<pre class=" language-javascript"><code class="language-javascript">git@github<span class="token punctuation">.</span>com<span class="token punctuation">:</span>examplename<span class="token operator">/</span>examplename<span class="token punctuation">.</span>github<span class="token punctuation">.</span>io<span class="token punctuation">.</span>git
+</code></pre>
+<p>之后重新部署即可！！</p>
+<h1 id="WIN10内存占用过高的解决办法"><a href="#WIN10内存占用过高的解决办法" class="headerlink" title="WIN10内存占用过高的解决办法"></a>WIN10内存占用过高的解决办法</h1><p>首先对于WIN10真的是没法吐槽，系统原因导致很吃机械硬盘，再加上本来电脑配置就差，所以硬盘经常卡我也能接受，虽然配置差，但是内存经常占用过高我就实在是不能忍了，大概折腾了一下，可以这样解决：</p>
+<p>先放电脑配置：</p>
+<ul>
+<li><p>硬盘：西数 1T 机械硬盘，5400转</p>
+</li>
+<li><p>内存：4GB DDR3，什么牌子的不知道</p>
+</li>
+<li><p>CPU： i5-4210m，2.6GHZ</p>
+</li>
+</ul>
+<p>4GB的内存的确是寒酸了点，看任务管理器，主要是chrome占用比较高，网页运载大。<strong>所以把默认浏览器改换edge之后好了很多，内存占用大概是chrome的2/3</strong></p>
+<p>其次，考虑内存不足就去设置虚拟内存，在虚拟内存设置页面，<strong>对非系统盘都设置为无分页文件，仅对系统盘设置自定义大小，初始值和最大值都设置为推荐值</strong>。设置好之后重新启动。内存占用的确就能降下来了，之前大概剩余300MB左右，优化之后剩余稳定在1GB左右。</p>
+<p>当然最好的方法还是加内存条，但是对于这台配置很烂的机器就算啦。等毕业了买matebook13还不是美滋滋！</p>
+<h1 id="给GITHUB-PAGES绑定域名"><a href="#给GITHUB-PAGES绑定域名" class="headerlink" title="给GITHUB PAGES绑定域名"></a>给GITHUB PAGES绑定域名</h1><p>阿里云（万网）的ink域名很便宜，我就注册了一个….</p>
+<p>ping一下自己的github仓库地址，然后将IP做A、CNAME解析，并在github上补充自己的域名，在仓库目录下增加只含新域名的CNAME文件即可。</p>
+<p>又回归独立域名了！！！</p>
+<h1 id="基于MKDocs建立个人Wiki"><a href="#基于MKDocs建立个人Wiki" class="headerlink" title="基于MKDocs建立个人Wiki"></a>基于MKDocs建立个人Wiki</h1><p>实际上这个东西是从冉酱那里发现的，然后我思考了一下现实需求，就决定也弄一个。</p>
+<p>可以满足的需求如下：</p>
+<ul>
+<li><p>可以作为博客替代品，语言为英文（提供姿势水平）。</p>
+</li>
+<li><p>仅用来写学习笔记，科目是数学、物理学、材料科学、计算机科学，语言为英文。</p>
+</li>
+<li><p>如同作业一样强制自己做学习笔记，有利于留学生活的高效性。</p>
+</li>
+</ul>
+<p>因此，这个基于Python并可以部署到GitHub pages的Wiki程序还是很适合留学生用的，缺点是三栏式主题只有一个。</p>
+<p><strong>搭建</strong></p>
+<p>MKDocs的官方教程写得很详细，可以从官网上看：<a href="https://www.mkdocs.org" target="_blank" rel="noopener">https://www.mkdocs.org</a></p>
+<p>它支持多个版本的python，仅仅使用pip模块来安装即可。所以在CMD（建议管理员权限打开）下检查一下已安装的版本和pip，就能执行安装了：</p>
+<pre class=" language-javascript"><code class="language-javascript">python <span class="token operator">--</span>version
+
+pip <span class="token operator">--</span>version</code></pre>
+<p>注意这里只要显示有较新版本pip即可，除非安装失败否则不要按照官网教程更新pip！！容易误删！！我的python版本是python3.7，pip版本是pip19.2.1。所以直接开始安装，并查看版本。</p>
+<pre class=" language-javascript"><code class="language-javascript">pip install mkdocs
+
+mkdocs <span class="token operator">--</span>version</code></pre>
+<p>安装成功，显示mkdocs版本为1.0.4，匹配python3.7。注意安装目录是python安装目录下\lib\site-packages\mkdocs，所以写文章之前，要先在你想要的目录下创建项目，以方便后期备份！！我习惯放到D盘里了，名字就是my-project。因此</p>
+<pre class=" language-javascript"><code class="language-javascript">D<span class="token punctuation">:</span>
+cd D<span class="token punctuation">:</span>\
+mkdocs <span class="token keyword">new</span> <span class="token class-name">my</span><span class="token operator">-</span>project
+cd my<span class="token operator">-</span>project</code></pre>
+<p>之后安装material主题</p>
+<pre class=" language-javascript"><code class="language-javascript">pip install mkdocs<span class="token operator">-</span>material</code></pre>
+<p>然后在配置yml文件之前，先考虑一下如何建立这个可以web访问的网站？它可以放到GitHub Pages上，这意味着可以绑定域名并且开启https。而一个github账户只能开一个个人Github Pages，下属无数个项目GitHub Pages，所以首先要建立项目GitHub Pages。这里我参考了：<a href="https://segmentfault.com/a/1190000003946969" target="_blank" rel="noopener">https://segmentfault.com/a/1190000003946969</a></p>
+<p>实际操作没文章里说的那么难，无非是：</p>
+<ul>
+<li><p>随意建立一个repo，名字随意，在setting里直接拉到GitHub Pages，Source选择master branch，Custom domain设置为自己的二级域名（当然你可以绑其他域名，无所谓一二级）。勾选Enforce HTTPS从而强制开启https。这个时候会自动生成一个CNAME文件，里面是二级域名，不带https的那种！！如wiki.chnliefeng.ink。</p>
+</li>
+<li><p>打开域名服务商，如阿里云，在域名解析里开启二级域名，是CNAME记录。我的设置是CNAME主机记录为wiki，记录值为liefeng.github.io。然后解析，过一会儿即可访问 <a href="https://wiki.chnliefeng.ink" target="_blank" rel="noopener">https://wiki.chnliefeng.ink</a></p>
+</li>
+</ul>
+<p>然后这个时候参考官方指南来配置mkdocs.yml。注意pages要用nav描述。</p>
+<p><strong>部署</strong></p>
+<p>先git clone那个repo，记得更改branch为gh-pages，然后把my-project里面所有东西放到repo目录下，之后</p>
+<pre class=" language-javescript"><code class="language-javescript">mkdocs gh-deploy</code></pre>
+<p>这样就部署好了</p>
+<h1 id="Mkdocs支持markdown数学公式"><a href="#Mkdocs支持markdown数学公式" class="headerlink" title="Mkdocs支持markdown数学公式"></a>Mkdocs支持markdown数学公式</h1><p>最近要用来写物理/数学的学习笔记，就研究了一下。实际上这个设置非常简单。安装pymdown-extensions然后配置mkdoc.yml文件即可，</p>
+<p>首先安装插件</p>
+<pre class=" language-javescript"><code class="language-javescript">pip install pymdown-extensions</code></pre>
+<p>然后在mkdocs的根目录下的docs文件夹中新建一个mathjax-config.js文件，该文件是辅助配置MathJax，里面代码为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">/* mathjax-loader.js  file */</span>
+<span class="token comment" spellcheck="true">/* ref: http://facelessuser.github.io/pymdown-extensions/extensions/arithmatex/ */</span>
+<span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span>win<span class="token punctuation">,</span> doc<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  win<span class="token punctuation">.</span>MathJax <span class="token operator">=</span> <span class="token punctuation">{</span>
+    config<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"MMLorHTML.js"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    extensions<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"tex2jax.js"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    jax<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"input/TeX"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    tex2jax<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      inlineMath<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span><span class="token string">"\\("</span><span class="token punctuation">,</span><span class="token string">"\\)"</span><span class="token punctuation">]</span> <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      displayMath<span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token punctuation">[</span><span class="token string">"\\["</span><span class="token punctuation">,</span><span class="token string">"\\]"</span><span class="token punctuation">]</span> <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    TeX<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+      TagSide<span class="token punctuation">:</span> <span class="token string">"right"</span><span class="token punctuation">,</span>
+      TagIndent<span class="token punctuation">:</span> <span class="token string">".8em"</span><span class="token punctuation">,</span>
+      MultLineWidth<span class="token punctuation">:</span> <span class="token string">"85%"</span><span class="token punctuation">,</span>
+      equationNumbers<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        autoNumber<span class="token punctuation">:</span> <span class="token string">"AMS"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      unicode<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        fonts<span class="token punctuation">:</span> <span class="token string">"STIXGeneral,'Arial Unicode MS'"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    displayAlign<span class="token punctuation">:</span> <span class="token string">'center'</span><span class="token punctuation">,</span>
+    showProcessingMessages<span class="token punctuation">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    messageStyle<span class="token punctuation">:</span> <span class="token string">'none'</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span>window<span class="token punctuation">,</span> document<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>之后在mkdocs.yml文件中添加以下代码即可</p>
+<pre class=" language-javascript"><code class="language-javascript">markdown_extensions<span class="token punctuation">:</span>
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>arithmatex
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>betterem<span class="token punctuation">:</span>
+      smart_enable<span class="token punctuation">:</span> all
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>caret
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>critic
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>details
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>emoji<span class="token punctuation">:</span>
+      emoji_generator<span class="token punctuation">:</span> <span class="token operator">!</span><span class="token operator">!</span>python<span class="token operator">/</span>name<span class="token punctuation">:</span>pymdownx<span class="token punctuation">.</span>emoji<span class="token punctuation">.</span>to_svg
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>inlinehilite
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>magiclink
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>mark
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>smartsymbols
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>superfences
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>tasklist<span class="token punctuation">:</span>
+      custom_checkbox<span class="token punctuation">:</span> <span class="token boolean">true</span>
+  <span class="token operator">-</span> pymdownx<span class="token punctuation">.</span>tilde
+extra_javascript<span class="token punctuation">:</span>
+  <span class="token operator">-</span> mathjax<span class="token operator">-</span>config<span class="token punctuation">.</span>js
+  <span class="token operator">-</span> https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>cdnjs<span class="token punctuation">.</span>cloudflare<span class="token punctuation">.</span>com<span class="token operator">/</span>ajax<span class="token operator">/</span>libs<span class="token operator">/</span>mathjax<span class="token operator">/</span><span class="token number">2.7</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token operator">/</span>MathJax<span class="token punctuation">.</span>js<span class="token operator">?</span>config<span class="token operator">=</span>TeX<span class="token operator">-</span>MML<span class="token operator">-</span>AM_CHTML</code></pre>
+<p>之后部署带有markdown数学公式的文档，查看网页效果即可。</p>
+<h1 id="Zabbix-监控系统的搭建与应用（未完待续）"><a href="#Zabbix-监控系统的搭建与应用（未完待续）" class="headerlink" title="Zabbix 监控系统的搭建与应用（未完待续）"></a>Zabbix 监控系统的搭建与应用（未完待续）</h1><p>这是来自乌海市某物联网科技公司的需要，也是我的的第一单。</p>
+<p>使用资源：</p>
+<ul>
+<li>JAIST Cloud Service 提供Centos7桌面环境</li>
+<li>Zabbix </li>
+<li>自己组装的电脑主机，装Centos7，作为Zabbix的总服务器端</li>
+<li>计算机网络集群，windows7，200台构成</li>
+</ul>
+<p>由于这个公司某无法无天的技术员利用公司计算机集群挖矿，对公司造成重大经济损失，而他掌握公司技术命脉，且所有技术设置都是黑箱操作，因此我们建立zabbix系统的目的是：</p>
+<ul>
+<li>实现对计算机集群的实时检测，以确定运行情况，打破黑箱操作的现状。</li>
+<li>在监控之后，使用teamviewer进行远程维护，同时进行逆向技术破解计算机集群设置，实现技术夺权。</li>
+</ul>
+<p><strong>Zabbix简述</strong></p>
+<p>Zabbix是开源软件，是一个企业级分布式开源监控解决方案。其官网有中文版说明书。对Zabbix的概述中，官方说明中有这样2个需要注意的描述：</p>
+<ul>
+<li><p>Zabbix server 是 Zabbix软件的核心组件，agent 向其报告可用性、系统完整性信息和统计信息。server也是存储所有配置信息、统计信息和操作信息的核心存储库。</p>
+</li>
+<li><p>Zabbix proxy 可以代替 Zabbix server采集性能和可用性数据。Zabbix proxy在Zabbix的部署是可选部分；但是proxy的部署可以很好的分担单个Zabbix server的负载。</p>
+</li>
+<li><p>Zabbix agents 部署在被监控目标上，用于主动监控本地资源和应用程序，并将收集的数据发送给 Zabbix server。</p>
+</li>
+</ul>
+<p>所以，如果我们想构建一个Zabbix监控网络，假设要监控M台主机构成的网络，可以使用1台设备作为server端，其他主机节点作为agents，但是会很吃server的计算性能，导致单个server终端负载过大。如果在这个网络中的主机节点分为N个组，每组配置一台proxy，之后总的sever只要采集每一组当中那台proxy的数据，并进行整理即可实现对整个主机网络的监控。这里很明显M远大于N，从硬件的运行性能上看，对于大型网络集群配置并使用proxy是很有必要的。</p>
+<p>针对这一点，官方说明中有提到：</p>
+<ul>
+<li>另外，回过头来整体的了解下 Zabbix 内部的数据流对Zabbix的使用也很重要。首先，为了创建一个采集数据的监控项，您就必须先创建主机。其次，在任务的另外一端，必须要有监控项才能创建触发器（trigger），必须要有触发器来创建动作（action）。因此，如果您想要收到类似“X个server上CPU负载过高”这样的告警，您必须首先为 Server X 创建一个主机条目，其次创建一个用于监控其 CPU的监控项，最后创建一个触发器，用来触发 CPU负载过高这个动作，并将其发送到您的邮箱里。虽然这些步骤看起来很繁琐，但是使用模板的话，实际操作非常简单。也正是由于这种设计，使得 Zabbix 的配置变得更加灵活易用。</li>
+</ul>
+<p>举个例子：网路由A，B，C3个地区的计算机集群组成，不同集群当中主机数量不同，施工技术方案与质量不同，网络运营质量不同，因此如果单个server同时监控A,B,C3个地区的计算机集群，其负载可能过大导致运行可靠性不稳定。而如果A,B,C3个地区各配置一台proxy，这样server的实际负载只有3个proxy，而单个proxy的负载也仅为该地区的计算机集群。这种网络体系对后期的增改很有利，且更具稳定性。</p>
+<p><strong>Zabbix的安装与部署</strong></p>
+<p>我从学校获得了一个Centos的云主机，但是没有root权限，不过只能用有限的资源来做技术验证了，具体信息如下：</p>
+<pre><code>使用主机：JAIST Could
+系统：Centos 7.6.1810
+用户权限：普通用户，无root权限
+系统默认的仓库：ftp.jaist.ac.jp</code></pre><p>首先要搭建LAMP环境，安装包一类的在JAIST仓库里有很多，所以不用愁资源的问题，网上也有很多LAMP环境的搭建教程。而普通用户没有root权限，这就意味着不能使用yum命令来配置/安装服务，但是wget命令来搭建和配置简直灾难。所以我的解决办法是使用yumdownloader命令，但是在此之前要先检查仓库里有没有所需的服务包，命令格式如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">yum list <span class="token string">'安装包（rpm包）名称*'</span></code></pre>
+<p>如果显示有，则可以直接下载安装rpm包</p>
+<pre class=" language-javascript"><code class="language-javascript">yumdownloader rpm包</code></pre>
+<p>解压rpm包</p>
+<pre class=" language-javascript"><code class="language-javascript">rpm2cpio rpm包 <span class="token operator">|</span>cpio <span class="token operator">-</span>idvm</code></pre>
+<p>添加PATH，如果在HOME目录下，可以如下</p>
+<pre class=" language-javascript"><code class="language-javascript">vim  <span class="token operator">~</span><span class="token operator">/</span><span class="token punctuation">.</span>bashrc
+<span class="token keyword">export</span> PATH<span class="token operator">=</span>$PATH<span class="token punctuation">:</span>$HOME<span class="token operator">/</span>usr<span class="token regex">/bin/</span></code></pre>
+<p>重新登录 或者 source 一下.bashrc文件即可使用这个程序。</p>
+<p>后来由于JAIST Could 是分出来的目录权限，不是云主机也不是VPS那种类型，而是类似N年前流行的那种虚拟空间。给学生的账号也没有root权限，能用的服务也很少。但是学校的docker我还没测试，因此就直接转战虚拟机了。</p>
+<p><strong>CentOS的安装与配置</strong></p>
+<p>总结一下步骤：</p>
+<ul>
+<li>系统的版本选择与USB系统盘的制作</li>
+<li>系统安装与网络及其他设置</li>
+</ul>
+<p>关于Centos要注意一下它的版本问题，针对不同版本的Linux主要以下2个命令：</p>
+<pre class=" language-javascript"><code class="language-javascript">uname <span class="token operator">-</span>a
+cat <span class="token operator">/</span>etc<span class="token operator">/</span>redhat<span class="token operator">-</span>release</code></pre>
+<p>这里要说明一下Centos的发行版本之间的区别(机翻自readme文档)：</p>
+<pre class=" language-javascript"><code class="language-javascript">List <span class="token keyword">of</span> images <span class="token keyword">in</span> <span class="token keyword">this</span> directory
+<span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">==</span>
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>DVD<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+This DVD image contains all the packages that can be installed using the
+installer<span class="token punctuation">.</span> This is the recommended image <span class="token keyword">for</span> most users<span class="token punctuation">.</span>
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>NetInstall<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+This is the network install and rescue image<span class="token punctuation">.</span> The installer will ask <span class="token keyword">from</span>
+where it should fetch the packages to be installed<span class="token punctuation">.</span> This image is most
+useful <span class="token keyword">if</span> you have a local mirror <span class="token keyword">of</span> CentOS packages<span class="token punctuation">.</span>
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>Everything<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+This image contains the complete <span class="token keyword">set</span> <span class="token keyword">of</span> packages <span class="token keyword">for</span> CentOS Linux <span class="token number">7</span><span class="token punctuation">.</span> It can be
+used <span class="token keyword">for</span> installing or populating a local mirror<span class="token punctuation">.</span> This image needs a 16GB USB
+flash drive <span class="token keyword">as</span> it is too large <span class="token keyword">for</span> DVD isos<span class="token punctuation">.</span>
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>LiveGNOME<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>LiveKDE<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+These images are Live images <span class="token keyword">of</span> CentOS Linux <span class="token number">7</span><span class="token punctuation">.</span> Depending on the name they use the respective display manager<span class="token punctuation">.</span> They are designed <span class="token keyword">for</span> testing purposes and exploring the CentOS Linux <span class="token number">7</span> environment<span class="token punctuation">.</span> They will not modify the content <span class="token keyword">of</span> your hard disk<span class="token punctuation">,</span> unless you choose to install CentOS Linux <span class="token number">7</span> <span class="token keyword">from</span> within the Live environment<span class="token punctuation">.</span> Please be advised that you can not change the <span class="token keyword">set</span> <span class="token keyword">of</span> installed packages <span class="token keyword">in</span> <span class="token keyword">this</span> <span class="token keyword">case</span><span class="token punctuation">.</span> This needs to be done within the installed system using <span class="token string">'yum'</span><span class="token punctuation">.</span>
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>Minimal<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+The aim <span class="token keyword">of</span> <span class="token keyword">this</span> image is to install a very basic CentOS Linux <span class="token number">7</span> system<span class="token punctuation">,</span> <span class="token keyword">with</span> the minimum <span class="token keyword">of</span> packages needed to have a functional system<span class="token punctuation">.</span> Please burn <span class="token keyword">this</span> image onto a CD and boot your computer off it<span class="token punctuation">.</span> A preselected <span class="token keyword">set</span> <span class="token keyword">of</span> packages will be installed on your system<span class="token punctuation">.</span> Everything <span class="token keyword">else</span> needs to be installed using yum<span class="token punctuation">.</span> The <span class="token keyword">set</span> <span class="token keyword">of</span> packages installed by <span class="token keyword">this</span> image is identical to the one installed when choosing the group named <span class="token string">"Minimal"</span> <span class="token keyword">from</span> the full DVD image<span class="token punctuation">.</span>
+
+Using the installation images
+<span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">==</span>
+
+You can burn these images to a DVD or <span class="token string">'dd'</span> them to a USB flash drive<span class="token punctuation">.</span>
+After the boot media has been prepared<span class="token punctuation">,</span> boot the computer off the boot media<span class="token punctuation">.</span> If you <span class="token keyword">do</span> an install to your hard disk using these installation images<span class="token punctuation">,</span> please remember to run <span class="token string">"yum update"</span> after the installation to update your system to the latest packages<span class="token punctuation">.</span>
+
+Remember that <span class="token keyword">in</span> order to be able to partition your disk you will need to run
+the GUI installer which <span class="token keyword">in</span> turns needs enough RAM<span class="token punctuation">.</span> The same is <span class="token boolean">true</span> <span class="token keyword">for</span> the
+network setup step<span class="token punctuation">.</span> Please refer to the release notes available at
+http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>wiki<span class="token punctuation">.</span>centos<span class="token punctuation">.</span>org<span class="token operator">/</span>Manuals<span class="token operator">/</span>ReleaseNotes<span class="token operator">/</span>CentOS7 <span class="token keyword">for</span> more details about
+these aspects<span class="token punctuation">.</span>
+
+机翻如下：
+
+此目录中的图像列表
+<span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">==</span>
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>DVD<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+该DVD映像包含可以使用以下命令安装的所有软件包。
+安装程序。这是大多数用户的推荐图像。
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>NetInstall<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+这是网络安装和救援映像。安装程序将询问
+应该在哪里获取要安装的软件包。此图片是最
+如果您具有CentOS软件包的本地镜像，则很有用。
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>Everything<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+此映像包含用于CentOS Linux <span class="token number">7</span>的完整软件包集。
+用于安装或填充本地镜像。此图片需要16GB USB
+闪存驱动器，因为它对于DVD isos而言太大。
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>LiveGNOME<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>LiveKDE<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+这些图像是CentOS Linux <span class="token number">7</span>的实时图像。根据名称，它们使用各自的显示管理器。它们被设计用于测试目的和探索CentOS Linux <span class="token number">7</span>环境。除非您选择从Live环境中安装CentOS Linux <span class="token number">7</span>，否则它们不会修改硬盘的内容。请注意，在这种情况下，您不能更改已安装软件包的集合。这需要在安装的系统中使用<span class="token string">'yum'</span>完成。
+
+CentOS<span class="token number">-7</span><span class="token operator">-</span>x86_64<span class="token operator">-</span>Minimal<span class="token number">-1804</span><span class="token punctuation">.</span>iso
+此映像的目的是安装一个非常基本的CentOS Linux <span class="token number">7</span>系统，并使用具有功能性系统所需的最少软件包。请将此映像刻录到CD上，然后从计算机启动计算机。将安装一组预选的软件包。需要使用yum安装所有其他软件包。该映像安装的软件包集与从完整DVD映像中选择名为“最小”的组时安装的软件包相同。
+
+使用安装映像
+<span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">===</span><span class="token operator">==</span>
+
+您可以将这些图像刻录到DVD或“ dd”到USB闪存驱动器。
+准备好启动媒体后，从启动媒体启动计算机。如果使用这些安装映像安装到硬盘，请记住在安装后运行“ yum update”以将系统更新为最新的软件包。
+
+请记住，为了能够对磁盘进行分区，您需要运行
+GUI安装程序，而该安装程序又会频繁提供足够的RAM。对于
+网络设置步骤。请参阅发布说明，网址为：
+http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>wiki<span class="token punctuation">.</span>centos<span class="token punctuation">.</span>org<span class="token operator">/</span>Manuals<span class="token operator">/</span>ReleaseNotes<span class="token operator">/</span>CentOS7了解有关的更多详细信息
+这些方面
+</code></pre>
+<p>未完待续….</p>
+<h1 id="戴尔服务器出现-cpu0000-cpu2-internal-error-的解决办法"><a href="#戴尔服务器出现-cpu0000-cpu2-internal-error-的解决办法" class="headerlink" title="戴尔服务器出现 cpu0000 cpu2 internal error 的解决办法"></a>戴尔服务器出现 cpu0000 cpu2 internal error 的解决办法</h1><p>研究室有一台二手的DELL PowerEdge T620，源自江东林课题组，不过目前被我改来做计算设备，具体配置如下：</p>
+<pre><code>Workstation:
+
+DELL PowerEdge T620
+System: Windows 10 Pro,64-bit operating system
+CPU: Inter Xeon E5-2697 v2@2.70GHz(48CPUs), x64-based processor
+RAM: 32GB (DDR3)
+ROM: 300GB
+GPU: GTX1660 Super, P106-90</code></pre><p>由于是双路CPU，并且这个电脑有段时间没使用了，虽然调试结果看是能够基本正常使用，但总是出现系统错误导致win10强制重启。根据这里（<a href="https://jingyan.baidu.com/article/fec7a1e5487f905190b4e7ee.html），从系统的高级选项卡设置里取消了系统失败时自动重启的设定。但是不久就开始闪黄灯了，提示硬件设置有问题。根据面板显示是cpu0000" target="_blank" rel="noopener">https://jingyan.baidu.com/article/fec7a1e5487f905190b4e7ee.html），从系统的高级选项卡设置里取消了系统失败时自动重启的设定。但是不久就开始闪黄灯了，提示硬件设置有问题。根据面板显示是cpu0000</a> cpu2 internal error (IERR) contact support。本来就是用来跑计算的，也不止一次因为设备不稳定导致运行中断而损失惨重，因此就先暂停任务，解决这个硬件设置问题。</p>
+<p>我参考这里（<a href="https://www.jianshu.com/p/572fddcd9450）来进行解决。" target="_blank" rel="noopener">https://www.jianshu.com/p/572fddcd9450）来进行解决。</a></p>
+<p>这个错误是因为开启了CPU节能设置，需要在BIOS中关闭该设置即可恢复。解决方法是：</p>
+<p>①服务器按住电源键15秒后到关机状态，并拔掉电源,再按住电源30秒放一下静电，然后静待1分钟；</p>
+<p>②接通电源，会自动开机；不行的话就手动开机。</p>
+<p>③开机后再dell图标出来的时候按下F2还是F11来着,进入BIOS设置；（我的系统提示是F11，但一般应该是F2）。</p>
+<p>④system Setup - System BIOS ，选择 system profile Settings，进入后将右边的 Performance Per Watt（DAPC）改为 Custom；然后将 CIE 和 C States 选项改成 Disabled。</p>
+<p>⑤保存设置并重启设备</p>
+<p>至此，错误解决。重启之后设备再没闪黄灯，也没有出现莫名其妙的设备中断事故。果然很久没使用的老设备都要先好好调试才行….</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">I am poor，please give me money</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Alipay.jpg" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/QQpay.png" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/QQpay.png" alt="QQ 支付" title="QQ 支付"></a><div><span style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></span></div></div><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Wepay.png" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Wepay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>North Area</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://www.northarea.tech/0x001/" title="后端/运维技术笔记@2017~2020">https://www.northarea.tech/0x001/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/5/" rel="prev" title="修士一年级の手账"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">修士一年级の手账</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/0x002/" rel="next" title="乱七八糟的科研搬砖随笔（已停更）"><span class="post-nav-text">乱七八糟的科研搬砖随笔（已停更）</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>本站启用GitHub Issues作为评论系统。</span><br><span>所以如果是重要的评论，建议跳转 GitHub Issues 发表。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" href="https://github.com/liefeng/liefeng.github.io/issues?q=is:issue+后端/运维技术笔记@2017~2020" target="_blank" rel="noopener">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2016 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> North Area</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v4.2.1</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v0.7.2</span></div><div class="live_time"><span>本博客已抽象+老年化地运行</span><span id="display_live_time"></span><span class="moe-text">👊👴👊</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2016-07-12T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div class="footer-custom-text">Hosted by <a href="https://github.com/" rel="noopener" target="_blank">Github Pages</a></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#343536" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script><script defer src="/js/search/algolia-search.js"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"></div><div class="algolia-results"><div id="algolia-stats"></div><div id="algolia-hits"></div><div class="algolia-pagination" id="algolia-pagination"></div></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="想要搜些什么？" value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>

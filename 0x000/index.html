@@ -1,0 +1,606 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#343536"><meta name="author" content="North Area"><meta name="copyright" content="North Area"><meta name="generator" content="Hexo 4.2.1"><meta name="theme" content="hexo-theme-yun"><meta name="description" content="这是2016年~2017年10月我所用的阿里云ECS的运维技术记录集合，主要是基于centos6.5&#x2F;7.2,LAMP、LNMP与WordPress的个人维护记录集，适合新人参考。 备案与建站在空间搭建一些常见的网站程序并不是难事，至少对WordPress和Disuz！来说是这样的，毕竟我从11年开始就一直用各种各样的免费、收费（国外或香港）的虚拟主机建站，有关这些年来网络建站空间的内容我会写在另">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2016~2017阿里云ECS运维技术记录">
+<meta property="og:url" content="https://www.northarea.tech/0x000/index.html">
+<meta property="og:site_name" content="North Area">
+<meta property="og:description" content="这是2016年~2017年10月我所用的阿里云ECS的运维技术记录集合，主要是基于centos6.5&#x2F;7.2,LAMP、LNMP与WordPress的个人维护记录集，适合新人参考。 备案与建站在空间搭建一些常见的网站程序并不是难事，至少对WordPress和Disuz！来说是这样的，毕竟我从11年开始就一直用各种各样的免费、收费（国外或香港）的虚拟主机建站，有关这些年来网络建站空间的内容我会写在另">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/0PAGE.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/0page-1.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/0page-2.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/0page-3.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/0page-5.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE2.jpg">
+<meta property="og:image" content="http://ocuytj5om.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE1.jpg">
+<meta property="article:published_time" content="2017-10-19T07:16:35.000Z">
+<meta property="article:modified_time" content="2020-05-27T11:00:58.563Z">
+<meta property="article:author" content="North Area">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://ocuytj5om.bkt.clouddn.com/0PAGE.jpg"><title>2016~2017阿里云ECS运维技术记录 | North Area</title><link rel="shortcut icon" href="/yun.svg"><link rel="mask-icon" href="/yun.svg" color="#343536"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="preload" href="/js/utils.js" as="script"><link rel="preload" href="/js/hexo-theme-yun.js" as="script"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="stylesheet" href="/css/hexo-theme-yun.css"><link rel="alternate" href="/atom.xml" title="North Area"><script id="yun-config">
+    const Yun = window.Yun || {};
+    window.CONFIG = {"root":"/","title":"朔方北地","version":"0.7.2","anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"algolia":{"appID":"KJS1WW3ION","apiKey":"2951b1111d2713b0c699bea4eef865e1","indexName":"hexo","hits":{"per_page":8},"labels":{"input_placeholder":"想要搜些什么？","hits_empty":"找不到您查询的内容: ${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]}};
+  </script><script src="//at.alicdn.com/t/font_1847023_bauj9w7d7jk.js" async></script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;family=Source+Code+Pro&amp;display=swap" media="none" onload="this.media='all'"><script src="//at.alicdn.com/t/font_1140697_4i778vmn3jg.js" async></script><script>(function(){
+  var bp = document.createElement('script');
+  var curProtocol = window.location.protocol.split(':')[0];
+  if (curProtocol === 'https') {
+    bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+  }
+  else {
+    bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+  }
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(bp, s);
+})();</script><div class="js-Pjax"></div><link rel="stylesheet" href="/css/prism.css" type="text/css"></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script defer src="/js/ui/fireworks.js"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle sidebar-toggle-fixed hty-icon-button"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><aside class="sidebar"><script defer src="/js/sidebar.js"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="North Area"><img width="96" loading="lazy" src="https://avatars0.githubusercontent.com/u/3104820?s=460&amp;v=4" alt="North Area"></a><div class="site-author-name"><a href="/about/">North Area</a></div><a class="site-name" href="/about/site.html">North Area</a><sub class="site-subtitle">Study at JAIST.</sub><div class="site-desciption">一个苦逼的日本留学生</div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="我的主页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item site-state-posts"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">17</span></a></div><div class="site-state-item site-state-categories"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">3</span></a></div><div class="site-state-item site-state-tags"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">7</span></a></div><a class="site-state-item hty-icon-button" href="/albums/" title="相册"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-gallery-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="/atom.xml" title="RSS" target="_blank" style="color:orange"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-rss-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/liefneg" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:chnliefeng@gmail.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.weibo.com/5697878146" title="微博" target="_blank" style="color:#E6162D"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-weibo-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://music.163.com/#/user/home?id=96885760" title="网易云音乐" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-netease-cloud-music-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://space.bilibili.com/26092673" title="哔哩哔哩" target="_blank" style="color:#FF8EB3"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-bilibili-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.pixiv.net/users/21362852" title="Pixiv" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-pixiv"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://note.northarea.tech/" title="Note" target="_blank" style="color:#696a6b"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-Dyanjing"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://twitter.com/1073512358" title="Twitter" target="_blank" style="color:#1da1f2"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-twitter-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://t.me/northarea" title="Telegram" target="_blank" style="color:#0088CC"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-telegram-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.instagram.com/hawksera" title="Instagram" target="_blank" style="color:#C20C0C"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-instagram"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1073512358&amp;site=qq&amp;menu=yes" title="QQ" target="_blank" style="color:#e0dea4"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-men-line"></use></svg></a><a class="links-item hty-icon-button" href="/girls/" title="喜欢的女孩子" style="color:hotpink"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-women-line"></use></svg></a></div></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#备案与建站"><span class="toc-number">1.</span> <span class="toc-text">备案与建站</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ECS无法发送邮件的解决"><span class="toc-number">2.</span> <span class="toc-text">ECS无法发送邮件的解决</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2016-5月漏洞修复"><span class="toc-number">3.</span> <span class="toc-text">2016&#x2F;5月漏洞修复</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网站无法评论的解决方法"><span class="toc-number">4.</span> <span class="toc-text">网站无法评论的解决方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#曲折的伪静态设置"><span class="toc-number">5.</span> <span class="toc-text">曲折的伪静态设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#主题被玩坏了之后的抢救-优化…"><span class="toc-number">6.</span> <span class="toc-text">主题被玩坏了之后的抢救+优化….</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于FTP抽风的解决…"><span class="toc-number">7.</span> <span class="toc-text">关于FTP抽风的解决…</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Apache虚拟主机设置"><span class="toc-number">8.</span> <span class="toc-text">Apache虚拟主机设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2017-1月漏洞修复总结"><span class="toc-number">9.</span> <span class="toc-text">2017&#x2F;1月漏洞修复总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于WordPress文章摘要字数与字体问题"><span class="toc-number">10.</span> <span class="toc-text">关于WordPress文章摘要字数与字体问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#centos6-5-Apache的ssl配置"><span class="toc-number">11.</span> <span class="toc-text">centos6.5+Apache的ssl配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#对恶心爬虫YisouSpider的屏蔽"><span class="toc-number">12.</span> <span class="toc-text">对恶心爬虫YisouSpider的屏蔽</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx配置虚拟主机"><span class="toc-number">13.</span> <span class="toc-text">Nginx配置虚拟主机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#关于网站被黑及相关处理"><span class="toc-number">14.</span> <span class="toc-text">关于网站被黑及相关处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#灵梦-amp-魔理沙のBlog萌化"><span class="toc-number">15.</span> <span class="toc-text">灵梦&amp;魔理沙のBlog萌化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux内核漏洞修复与吐槽"><span class="toc-number">16.</span> <span class="toc-text">Linux内核漏洞修复与吐槽</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#重建站点"><span class="toc-number">17.</span> <span class="toc-text">重建站点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ECS漏洞修复"><span class="toc-number">18.</span> <span class="toc-text">ECS漏洞修复</span></a></li></ol></div></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="post-block" itemscope itemtype="https://schema.org/Article"><link itemprop="mainEntityOfPage" href="https://www.northarea.tech/0x000/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="North Area"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="North Area"></span><header class="post-header"><h1 class="post-title" itemprop="name headline" style="color: undefined">2016~2017阿里云ECS运维技术记录</h1><div class="post-meta"><div class="post-time" style="display:block"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2017-10-19 15:16:35" itemprop="dateCreated datePublished" datetime="2017-10-19T15:16:35+08:00">2017-10-19</time><span class="post-meta-divider">-</span><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-2-line"></use></svg></span> <time title="修改时间：2020-05-27 19:00:58" itemprop="dateModified" datetime="2020-05-27T19:00:58+08:00">2020-05-27</time></div><span class="post-count"><span class="post-symbolcount"><span class="post-meta-item-icon" title="本文字数"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-file-word-line"></use></svg></span> <span title="本文字数">82k</span><span class="post-meta-divider">-</span><span class="post-meta-item-icon" title="阅读时长"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-timer-line"></use></svg></span> <span title="阅读时长">2:30</span></span></span><div class="post-classify"><span class="post-category"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span> <span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/" style="--text-color:#FB7299" itemprop="url" rel="index"><span itemprop="text">技术文档</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag" href="/tags/%E6%8A%80%E6%9C%AF/" style="--text-color:#DD306A"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">技术</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content post-markdown"><p>这是2016年~2017年10月我所用的阿里云ECS的运维技术记录集合，主要是基于centos6.5/7.2,LAMP、LNMP与WordPress的个人维护记录集，适合新人参考。</p>
+<h1 id="备案与建站"><a href="#备案与建站" class="headerlink" title="备案与建站"></a>备案与建站</h1><p>在空间搭建一些常见的网站程序并不是难事，至少对WordPress和Disuz！来说是这样的，毕竟我从11年开始就一直用各种各样的免费、收费（国外或香港）的虚拟主机建站，有关这些年来网络建站空间的内容我会写在另一篇文章里。这一篇主要谈谈这次使用“服务器”建站以及域名备案的经历。</p>
+<p>最初有这个念头的时候是因为上大学后一直想把技术小组再搞起来，恰好邮箱里收到了阿里云“云翼计划”相关的宣传，ECS服务器仅9.9元/月，就一鼓作气进行了学生认证，买了2年的专版ECS和域名，开始着手新站点的搭建。</p>
+<p><strong>域名备案</strong></p>
+<p>域名备案总体来说是较为容易的，只要按照备案系统的提示去做就行：从阿里云备案系统上传一些认证资料，该填的内容都填了，就可以直接提交管局了（内蒙这边并没有要求邮寄资料），管局审批也比较快，本站域名大概用了17天，备案就下来了。</p>
+<p><strong>建站</strong></p>
+<p>阿里云ECS服务器，虽然我个人感觉称它为vps更恰当一些，但速度和稳定性上是真的不错的，不过由于之前并没有怎么接触过Linux，对网站搭建有些难上手。加上自己也没太多时间操作，整个建站过程用了1个星期。</p>
+<p>1.基于Ubuntu搭建lamp环境</p>
+<p>Ubuntu搭建lamp环境相比centos简单一些，按照网上教程一步一步来就行，不过在实际操作当中MySQL的安装总是出错，网上这好像也是普遍问题，就果断换centos了。</p>
+<p>这里给一个Ubuntu搭建lamp的教程：<a href="http://www.cnblogs.com/chenzhou851025/archive/2012/12/15/2818860.html" target="_blank" rel="noopener">http://www.cnblogs.com/chenzhou851025/archive/2012/12/15/2818860.html</a></p>
+<p>2.基于centos搭建lnmp环境以及安装wdcp面板</p>
+<p>centos6.5 64位，官方有相关的搭建教程，虽然相比Ubuntu来说更麻烦一些，不过经过2次搭建也算搭建成功了。至于搭建wdcp面板也基本没什么大碍，但相对的又出现一个问题：虽然通过wdcp面板可以很简单的搭建WordPress，但要经常维护以避免一些安全问题，虽然阿里云ECS以及进行了安全设置，但安全问题主要还是由使用者造成的，所以尝试第三种方法搭建了。</p>
+<p>官方centos搭建lnmp教程：<a href="https://help.aliyun.com/knowledge_detail/7605569.html?spm=5176.788314854.2.6.r1dc8w" target="_blank" rel="noopener">https://help.aliyun.com/knowledge_detail/7605569.html?spm=5176.788314854.2.6.r1dc8w</a></p>
+<p>3.基于阿里云镜像一站式搭建WordPress</p>
+<p>阿里云镜像市场对于小白站长来说是很有帮助的，至少大多数所需程序的镜像都有，价格也不贵，而且提供官方售后！这一点很重要。购买WordPress镜像之后从管理控制台更换系统就OK了，之后链接ECS，用指令获取ftp、MySQL、PHPmyadmin等权限账号和密码。</p>
+<p>官方教程：<a href="https://help.aliyun.com/document_detail/ecs/quick-start-for-linux/examples.html?spm=5176.product8314827_ecs.6.135.mK0DES" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/ecs/quick-start-for-linux/examples.html?spm=5176.product8314827_ecs.6.135.mK0DES</a></p>
+<p><strong>基础优化</strong></p>
+<p>建站之后只对程序作了优化：WordPress禁用谷歌字体，删除没用的插件，源代码优化、权限设置等等，网站cdn加速，ECS带宽扩展一类的准备以后做。关于这部分就具体问题具体分析了，网上有大量的专项教程可供参考。</p>
+<h1 id="ECS无法发送邮件的解决"><a href="#ECS无法发送邮件的解决" class="headerlink" title="ECS无法发送邮件的解决"></a>ECS无法发送邮件的解决</h1><p>检查sendmail服务是否运行</p>
+<p>连接主机之后输入</p>
+<pre class=" language-javascript"><code class="language-javascript">ps aux <span class="token operator">|</span> grep sendmail</code></pre>
+<p>结果显示没有，从阿里云的官方帮助文档上看这个服务要后期安装，这样基本上就好说了，毕竟自己现在也在自学Linux。输入</p>
+<pre class=" language-javascript"><code class="language-javascript">yum <span class="token operator">-</span>y install sendmail  </code></pre>
+<p>安装 sendmail服务，等出现Complete!就说明安装成功了，接下来要让服务运行，输入</p>
+<pre class=" language-javascript"><code class="language-javascript">service sendmail start</code></pre>
+<p>成功运行会显示</p>
+<pre class=" language-javascript"><code class="language-javascript">Starting sendmail<span class="token punctuation">:</span> <span class="token punctuation">[</span> OK <span class="token punctuation">]</span>
+Starting sm<span class="token operator">-</span>client<span class="token punctuation">:</span> <span class="token punctuation">[</span> OK <span class="token punctuation">]</span></code></pre>
+<p>之后再输入</p>
+<pre class=" language-javascript"><code class="language-javascript">ps aux <span class="token operator">|</span> grep sendmail</code></pre>
+<p>用于检测是否正常运行，正常运行会显示</p>
+<pre class=" language-javascript"><code class="language-javascript">root <span class="token number">8571</span> <span class="token number">0.0</span> <span class="token number">0.2</span> <span class="token number">87436</span> <span class="token number">2720</span> <span class="token operator">?</span> Ss <span class="token number">19</span><span class="token punctuation">:</span><span class="token number">20</span> <span class="token number">0</span><span class="token punctuation">:</span><span class="token number">00</span> sendmail<span class="token punctuation">:</span> accepting connections
+smmsp <span class="token number">8581</span> <span class="token number">0.0</span> <span class="token number">0.2</span> <span class="token number">78896</span> <span class="token number">2140</span> <span class="token operator">?</span> Ss <span class="token number">19</span><span class="token punctuation">:</span><span class="token number">20</span> <span class="token number">0</span><span class="token punctuation">:</span><span class="token number">00</span> sendmail<span class="token punctuation">:</span> Queue runner@<span class="token number">01</span><span class="token punctuation">:</span><span class="token number">00</span><span class="token punctuation">:</span><span class="token number">00</span> <span class="token keyword">for</span> <span class="token operator">/</span><span class="token keyword">var</span><span class="token operator">/</span>spool<span class="token operator">/</span>clientmqueue
+root <span class="token number">8604</span> <span class="token number">0.0</span> <span class="token number">0.0</span> <span class="token number">103256</span> <span class="token number">832</span> pts<span class="token operator">/</span><span class="token number">0</span> S<span class="token operator">+</span> <span class="token number">19</span><span class="token punctuation">:</span><span class="token number">24</span> <span class="token number">0</span><span class="token punctuation">:</span><span class="token number">00</span> grep sendmail</code></pre>
+<p>更改主机名为0page.org</p>
+<pre class=" language-javascript"><code class="language-javascript">hostname 0page<span class="token punctuation">.</span>org</code></pre>
+<p>发送测试邮件到我的邮箱</p>
+<pre class=" language-javascript"><code class="language-javascript">echo “testmail” <span class="token operator">|</span> mail <span class="token operator">-</span>s test <span class="token number">1073512358</span>@qq<span class="token punctuation">.</span>com
+
+echo $<span class="token operator">?</span></code></pre>
+<p>登录邮箱发现邮件已收到，但是回到WordPress测试发送邮件仍然收不到，这时候从论坛上找到了解决方法，让sendmail服务自动运行，输入</p>
+<pre class=" language-javascript"><code class="language-javascript">ed <span class="token operator">/</span>etc<span class="token operator">/</span>rc<span class="token punctuation">.</span>local</code></pre>
+<p>增加一句</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span>etc<span class="token operator">/</span>init<span class="token punctuation">.</span>d<span class="token operator">/</span>sendmail start</code></pre>
+<p>之后保存，退出，即输入</p>
+<pre class=" language-javascript"><code class="language-javascript">w
+
+q</code></pre>
+<p>这个时候再回到WordPress测试一下能不能发送邮件，成功发送。不过被列入垃圾邮件了，但起码能发送了，问题得以解决。</p>
+<h1 id="2016-5月漏洞修复"><a href="#2016-5月漏洞修复" class="headerlink" title="2016/5月漏洞修复"></a>2016/5月漏洞修复</h1><p>首先是5月5日，CVE-2016-3714漏洞被爆出，即ImageMagick的高危漏洞(CVE-2016-3714)，引用阿里云的邮件描述是此漏洞允许攻击者通过上传恶意构造的图像文件，在目标服务器执行任意代码。黑客可利用此类漏洞盗取权限窃取数据。由于ImageMagick应用十分广泛，目前已确定Wordpress等知名应用受此漏洞影响。 所以5月6日一早花了15分钟去修复这个漏洞。<br>修复方法为更新到最新版即可，首先通过putty连接到Linux主机上，之后下载ImageMagick。即输入</p>
+<pre class=" language-javascript"><code class="language-javascript">wget ftp<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>ftp<span class="token punctuation">.</span>imagemagick<span class="token punctuation">.</span>org<span class="token operator">/</span>pub<span class="token operator">/</span>ImageMagick<span class="token operator">/</span>linux<span class="token operator">/</span>CentOS<span class="token operator">/</span>x86_64<span class="token operator">/</span>ImageMagick<span class="token number">-7.0</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">.</span>x86_64<span class="token punctuation">.</span>rpm</code></pre>
+<p>然后安装，输入</p>
+<pre class=" language-javascript"><code class="language-javascript">rpm <span class="token operator">-</span>Uvh ImageMagick<span class="token number">-7.0</span><span class="token punctuation">.</span><span class="token number">1</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">.</span>x86_64<span class="token punctuation">.</span>rpm</code></pre>
+<p>或</p>
+<pre class=" language-javascript"><code class="language-javascript">yum install ImageMagick</code></pre>
+<p>这样就算成功修复漏洞了，毕竟是旧版本的0day。</p>
+<p>然而就在第二天，阿里云又紧急给我发邮件说另一个漏洞被爆出，FFmpeg 2.x远程文件读取漏洞，还是攻击者上传构造的hls切片索引文件进行攻击。我查了一下这台机子，没有发现有安装FFmpeg。</p>
+<p>来简单分析一下这些漏洞，攻击操作都是上传！！这一点很重要。简单的说只要开放了 上传权限就可以被人利用这个漏洞进行攻击。然而，以本站为例，并不开放评论权限，更别说游客的上传权限了。那么要利用这个漏洞就只能拿下权限账号，然而这就又回到了社工类的问题。或者考虑旁注，亦或是使用这个版本WordPress的漏洞，可是在高权限限制的情况下，外加较为系统的维护，这种方法很难成功，更何况这是个小站！</p>
+<p>那么，可以考虑一下大众化的情况，通过关键字利用搜索引擎大面积扫这种站（不一定是WordPress，只要是使用ImageMagick的都算），之后选择开放权限的，然后…这让我想起了某个论坛，使用垃圾空间，主机上200+站，自身漏洞还不少，轻松抓包改包….</p>
+<p>当然，回归这个漏洞使用的问题，严格限制权限和积极维护好站点是完全没问题的。就像当年啊D的D盾被攻破的漏洞利用一样，必须是在获得高权限的条件下才能进行，所以安全问题，永远都是人的问题。</p>
+<p>阿里云官方对此一直在宣传自己的新产品——云盾web防火墙，另外知道创宇等团队也在第一时间为自身产品推出了应对方法，至于低成本的一些不怎么靠谱的站长就呵呵了。</p>
+<p>————————————————————————————————–2016.8.30更新</p>
+<p>最新的修复方式为，将/wp-includes/media.php文件中</p>
+<pre class=" language-javascript"><code class="language-javascript">$implementations <span class="token operator">=</span> <span class="token function">apply_filters</span><span class="token punctuation">(</span> ‘wp_image_editors’<span class="token punctuation">,</span> <span class="token function">array</span><span class="token punctuation">(</span> ‘WP_Image_Editor_Imagick’ <span class="token punctuation">,</span> ‘WP_Image_Editor_GD’ <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>改为</p>
+<pre class=" language-javascript"><code class="language-javascript">$implementations <span class="token operator">=</span> <span class="token function">apply_filters</span><span class="token punctuation">(</span> ‘wp_image_editors’<span class="token punctuation">,</span> <span class="token function">array</span><span class="token punctuation">(</span> ‘WP_Image_Editor_GD’ <span class="token punctuation">,</span>’WP_Image_Editor_Imagick’ <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="网站无法评论的解决方法"><a href="#网站无法评论的解决方法" class="headerlink" title="网站无法评论的解决方法"></a>网站无法评论的解决方法</h1><p>WordPress的主题，也是折腾的一个环节，除了各种页面调试，有时候也会有一些因为代码缺失或者内容冲突导致的问题。昨天一个博主Charlotte 给我发邮件说我博客的评论系统有bug，无法评论。一开始以为是后台设置有问题，结果自己重新查看，并测试了一下是评论无法计入数据库导致的。具体显示为提交评论，会显示错误：请填写必填项目（如用户名和电子邮件）…</p>
+<p>从网上找了一下这个问题的解决方法但是居然没有相关记录..所以只能自己解决了，一般来说数据库不可能出问题，只能是主题代码的一些问题导致的，所以也没有急着用FTP查看网站文件的代码，先在后台编辑看了一下，果然发现了问题所在：编辑主题-评论（comments.php），里面<code>&lt;form&gt;…&lt;/form&gt;</code>表单属性有缺失，问题代码为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>form role<span class="token operator">=</span>”form” action<span class="token operator">=</span>”<span class="token operator">&lt;</span><span class="token operator">?</span>php echo <span class="token function">get_option</span><span class="token punctuation">(</span>‘siteurl’<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">?</span><span class="token operator">></span><span class="token operator">/</span>wp<span class="token operator">-</span>comments<span class="token operator">-</span>post<span class="token punctuation">.</span>php” method<span class="token operator">=</span>”post” id<span class="token operator">=</span>”comment<span class="token operator">-</span>form”<span class="token operator">></span></code></pre>
+<p>很明显后面缺了 name=”” 这个内容，补上：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>form role<span class="token operator">=</span>”form” action<span class="token operator">=</span>”<span class="token operator">&lt;</span><span class="token operator">?</span>php echo <span class="token function">get_option</span><span class="token punctuation">(</span>‘siteurl’<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token operator">?</span><span class="token operator">></span><span class="token operator">/</span>wp<span class="token operator">-</span>comments<span class="token operator">-</span>post<span class="token punctuation">.</span>php” method<span class="token operator">=</span>”post” id<span class="token operator">=</span>”comment<span class="token operator">-</span>form” name<span class="token operator">=</span>”comment<span class="token operator">-</span>form”<span class="token operator">></span></code></pre>
+<p>之后保存，回去重新测试，评论系统恢复正常，问题解决…然而又过了一段时间，还是有读者反应说无法评论，不过我测试成功了呀..原来是以管理员身份测试然并卵，只能重新找问题的原因了。终于，在评论页面表单的下面，有这样2句代码</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>group”<span class="token operator">></span>
+<span class="token operator">&lt;</span>input type<span class="token operator">=</span>”text” <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>control” id<span class="token operator">=</span>”comment<span class="token operator">-</span>author” placeholder<span class="token operator">=</span>”名字” name<span class="token operator">=</span>”author”<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+<span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>group”<span class="token operator">></span>
+<span class="token operator">&lt;</span>input type<span class="token operator">=</span>”text” <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>control” id<span class="token operator">=</span>”comment<span class="token operator">-</span>email” placeholder<span class="token operator">=</span>”Email” name<span class="token operator">=</span>”email” <span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span></code></pre>
+<p>很明显和之前那个表单一样,都没有name这一项！！（我改了表单居然没看到这里…晕），加上就好了，改为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>group”<span class="token operator">></span>
+<span class="token operator">&lt;</span>input type<span class="token operator">=</span>”text” <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>control” id<span class="token operator">=</span>”comment<span class="token operator">-</span>author” placeholder<span class="token operator">=</span>”名字” name<span class="token operator">=</span>”author”<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span>
+<span class="token operator">&lt;</span>div <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>group”<span class="token operator">></span>
+<span class="token operator">&lt;</span>input type<span class="token operator">=</span>”text” <span class="token keyword">class</span><span class="token operator">=</span>”form<span class="token operator">-</span>control” id<span class="token operator">=</span>”comment<span class="token operator">-</span>email” placeholder<span class="token operator">=</span>”Email” name<span class="token operator">=</span>”email”<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">></span></code></pre>
+<p>之后退出登录以游客身份来提交评论，成功2333~</p>
+<h1 id="曲折的伪静态设置"><a href="#曲折的伪静态设置" class="headerlink" title="曲折的伪静态设置"></a>曲折的伪静态设置</h1><p>机子是Apache2，我用putty连接主机改了httpd.conf，确认开启了伪静态模块。之后重启了Apache。.htaccess文件也加了伪静态代码并且上传到网站根目录，后台固定连接改为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span><span class="token operator">%</span>category<span class="token operator">%</span><span class="token operator">/</span><span class="token operator">%</span>post_id<span class="token operator">%</span><span class="token punctuation">.</span>html</code></pre>
+<p>之后刷新，点击…呵呵！！</p>
+<p>明明都是按步骤来的，我之后又全部重新检查一遍都没问题，还是不能伪静态，真是醉了。。。。</p>
+<p>最后重新查，尝试性的开启了DocumentRoot的AllowOverride</p>
+<p>.htaccess文件内改为</p>
+<pre class=" language-javascript"><code class="language-javascript"># BEGIN WordPress
+
+RewriteEngine On
+RewriteBase <span class="token operator">/</span>
+RewriteRule <span class="token operator">^</span>index\<span class="token punctuation">.</span>php$ – <span class="token punctuation">[</span>L<span class="token punctuation">]</span>
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_FILENAME<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">-</span>f
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_FILENAME<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">-</span>d
+RewriteRule <span class="token punctuation">.</span> <span class="token operator">/</span>index<span class="token punctuation">.</span>php <span class="token punctuation">[</span>L<span class="token punctuation">]</span>
+
+# END WordPress</code></pre>
+<p>终于成功了</p>
+<h1 id="主题被玩坏了之后的抢救-优化…"><a href="#主题被玩坏了之后的抢救-优化…" class="headerlink" title="主题被玩坏了之后的抢救+优化…."></a>主题被玩坏了之后的抢救+优化….</h1><p>今天主要是来解决一下评论问题，就是之前因为添加某段代码①，导致新人第一次在本站评论会显示无法评论….当然这个主题我也是很喜欢的，毕竟用了这么久…</p>
+<p>那么，删除了那段代码，结果就错误500了…随之开始抢救：</p>
+<p>1.用FTP连接主机，/wp-content/themes/目录下给主题改名，随后再进来就可以正常访问了</p>
+<p>2.到仪表盘更换主题</p>
+<p>3.用FTP查看，发现functions.php并没有问题，但是恢复主题文件名之后，站点依然是无法访问….无奈，直接从原主题的copy了个functions.php，用FTP替换原有的，问题解决….</p>
+<p>之后就是要优化了，主要是针对垃圾评论…（这也是之前那段代码的作用）</p>
+<p>最后从WordPress大学找到了这段代码，应该可以用，反正我这也是小站….</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">/* refused spam */</span>  
+<span class="token keyword">function</span> <span class="token function">refused_spam_comments</span><span class="token punctuation">(</span> $comment_data <span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+$pattern <span class="token operator">=</span> <span class="token string">'/[一-龥]/u'</span><span class="token punctuation">;</span>  
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">preg_match</span><span class="token punctuation">(</span>$pattern<span class="token punctuation">,</span>$comment_data<span class="token punctuation">[</span><span class="token string">'comment_content'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+<span class="token function">wp_die</span><span class="token punctuation">(</span><span class="token string">'评论必须含中文！'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+<span class="token punctuation">}</span>  
+<span class="token keyword">return</span><span class="token punctuation">(</span> $comment_data <span class="token punctuation">)</span><span class="token punctuation">;</span>  
+<span class="token punctuation">}</span>  
+<span class="token function">add_filter</span><span class="token punctuation">(</span><span class="token string">'preprocess_comment'</span><span class="token punctuation">,</span><span class="token string">'refused_spam_comments'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>至于那段①代码，也是从NYUN那边copy的，实际效果还好啦….</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">v7v3_en</span><span class="token punctuation">(</span>$comment<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$pattern <span class="token operator">=</span> <span class="token string">'/[一-龥]/u'</span><span class="token punctuation">;</span>
+$cau<span class="token operator">=</span>$comment<span class="token punctuation">[</span><span class="token string">'comment_author'</span><span class="token punctuation">]</span> <span class="token punctuation">;</span>
+$cem<span class="token operator">=</span>$comment<span class="token punctuation">[</span><span class="token string">'comment_author_email'</span><span class="token punctuation">]</span> <span class="token punctuation">;</span>
+global $wpdb<span class="token punctuation">;</span>
+$ok_to_comment <span class="token operator">=</span> $wpdb<span class="token operator">-</span><span class="token operator">></span><span class="token function">get_var</span><span class="token punctuation">(</span><span class="token string">"SELECT comment_approved FROM $wpdb->comments WHERE comment_author = '$cau' AND comment_author_email = '$cem' and comment_approved = '1' LIMIT 1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span> <span class="token function">is_user_logged_in</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token number">1</span> <span class="token operator">==</span> $ok_to_comment <span class="token punctuation">)</span><span class="token punctuation">{</span> <span class="token keyword">return</span> $comment<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+elseif <span class="token punctuation">(</span> <span class="token operator">!</span><span class="token function">preg_match_all</span><span class="token punctuation">(</span>$pattern<span class="token punctuation">,</span> $ccontent<span class="token punctuation">,</span> $match<span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token function">exit</span><span class="token punctuation">(</span>'
+<span class="token operator">&lt;</span>head<span class="token operator">></span><span class="token operator">&lt;</span>meta http<span class="token operator">-</span>equiv<span class="token operator">=</span><span class="token string">"Content-Type"</span> content<span class="token operator">=</span><span class="token string">"text/html; charset=utf8"</span><span class="token operator">/</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">></span>
+初次评论不允许纯英文哦<span class="token operator">~</span><span class="token operator">&lt;</span>a href<span class="token operator">=</span><span class="token string">"javascript:history.go(-1);"</span><span class="token operator">></span>向上一页<span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">></span>'<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token function">add_filter</span><span class="token punctuation">(</span><span class="token string">'preprocess_comment'</span><span class="token punctuation">,</span> <span class="token string">'v7v3_en'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">v7v3_comment_post</span><span class="token punctuation">(</span> $incoming_comment <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$http <span class="token operator">=</span> <span class="token string">'/[&lt;|KTV|ッ|の|ン|優|業|グ|貿|]/u'</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">preg_match</span><span class="token punctuation">(</span>$http<span class="token punctuation">,</span> $incoming_comment<span class="token punctuation">[</span><span class="token string">'comment_content'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token function">wp_die</span><span class="token punctuation">(</span> "
+<span class="token operator">&lt;</span>head<span class="token operator">></span><span class="token operator">&lt;</span>meta http<span class="token operator">-</span>equiv<span class="token operator">=</span><span class="token string">'Content-Type'</span> content<span class="token operator">=</span><span class="token string">'text/html; charset=utf8'</span><span class="token operator">/</span><span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>head<span class="token operator">></span>
+您的评论包含敏感关键词，被系统判断为垃圾评论！<span class="token operator">&lt;</span>a href<span class="token operator">=</span><span class="token string">'javascript:history.go(-1);'</span><span class="token operator">></span>向上一页<span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">></span>" <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">return</span><span class="token punctuation">(</span> $incoming_comment <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">add_filter</span><span class="token punctuation">(</span><span class="token string">'preprocess_comment'</span><span class="token punctuation">,</span> <span class="token string">'v7v3_comment_post'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="关于FTP抽风的解决…"><a href="#关于FTP抽风的解决…" class="headerlink" title="关于FTP抽风的解决…"></a>关于FTP抽风的解决…</h1><p>本来想给博客换几个图的，结果日常用的FileZilla居然无法连接到FTP！！这之前明明都好好的…<br>难道是我主机出问题了？？但是不可能呀，于是用putty连接，上去查了一下，命令如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">rpm <span class="token operator">-</span>qa<span class="token operator">|</span>grep vsftpd
+
+service vsftpd status</code></pre>
+<p>都显示正常…于是又重启了一下FTP，可是依然无法连接…<br>网上说这似乎要开启FTP的主动模式…好麻烦呀（copy百度上的介绍，反正我是绝对不会用的）</p>
+<p>主动模式的FTP工作原理：客户端从一个任意的非特权端口N连接到FTP服务器的命令端口，也就是21端口。然后客户端开始监听端口N+1，并发送FTP命令“port N+1”到FTP服务器。接着服务器会从它自己的数据端口（20）连接到客户端指定的数据端口（N+1）。<br>    针对FTP服务器前面的防火墙来说，必须允许以下通讯才能支持主动方式FTP：    </p>
+<ul>
+<li>1、 任何大于1024的端口到FTP服务器的21端口。（客户端初始化的连接）  </li>
+<li>2、 FTP服务器的21端口到大于1024的端口。 （服务器响应客户端的控制端口） </li>
+<li>3、 FTP服务器的20端口到大于1024的端口。（服务器端初始化数据连接到客户端的数据端口）</li>
+<li>4、 大于1024端口到FTP服务器的20端口（客户端发送ACK响应到服务器的数据端口）</li>
+</ul>
+<p>这里再说一下重新安装vsftpd…<br>查看vsftpd版本：</p>
+<pre class=" language-javascript"><code class="language-javascript">rpm <span class="token operator">-</span>qa<span class="token operator">|</span>grep vsftpd</code></pre>
+<p>之后卸载：</p>
+<pre class=" language-javascript"><code class="language-javascript">rpm <span class="token operator">-</span>e vsftpd<span class="token operator">-</span>xxxx版本</code></pre>
+<p>卸载时要备份原先的用户文件：</p>
+<pre class=" language-javascript"><code class="language-javascript">warning<span class="token punctuation">:</span> <span class="token operator">/</span>etc<span class="token operator">/</span>vsftpd<span class="token operator">/</span>vsftpd<span class="token punctuation">.</span>conf saved <span class="token keyword">as</span> <span class="token operator">/</span>etc<span class="token operator">/</span>vsftpd<span class="token operator">/</span>vsftpd<span class="token punctuation">.</span>conf<span class="token punctuation">.</span>rpmsave
+warning<span class="token punctuation">:</span> <span class="token operator">/</span>etc<span class="token operator">/</span>vsftpd<span class="token operator">/</span>user_list saved <span class="token keyword">as</span> <span class="token operator">/</span>etc<span class="token operator">/</span>vsftpd<span class="token operator">/</span>user_list<span class="token punctuation">.</span>rpmsave</code></pre>
+<p>删除上面的文件</p>
+<pre class=" language-javascript"><code class="language-javascript">rm <span class="token operator">-</span>rf <span class="token operator">/</span>etc<span class="token operator">/</span>vsftpd</code></pre>
+<p>查看vsftpd是否还在开机启动项中</p>
+<pre class=" language-javascript"><code class="language-javascript">chkconfig <span class="token operator">--</span>list</code></pre>
+<p>查看vsftpd运行状态</p>
+<pre class=" language-javascript"><code class="language-javascript">service vsftpd status</code></pre>
+<p>若返回：vsftpd: unrecognized service 则说明卸载了vsftpd了</p>
+<p>之后安装vsftpd，这个就不多说了，也可以自选一些版本…简单的说就是安装一下…</p>
+<pre class=" language-javascript"><code class="language-javascript">yum <span class="token operator">-</span>y install vsftpd</code></pre>
+<p>关于配置vsftpd…这个不具体说了，默认的配置一般是无需再更改的，就是手动添加一下自启，以防万一</p>
+<p>具体如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">chkconfig <span class="token operator">--</span>add vsftpd</code></pre>
+<p>开启开机启动</p>
+<pre class=" language-javascript"><code class="language-javascript">chkconfig <span class="token operator">--</span>level <span class="token number">35</span> vsftpd on</code></pre>
+<p>重新查看vsftpd再启动项列表中的情况</p>
+<pre class=" language-javascript"><code class="language-javascript">chkconfig <span class="token operator">--</span>list</code></pre>
+<p>结果如下：</p>
+<pre class=" language-javascript"><code class="language-javascript">vsftpd          <span class="token number">0</span><span class="token punctuation">:</span>off   <span class="token number">1</span><span class="token punctuation">:</span>off   <span class="token number">2</span><span class="token punctuation">:</span>off   <span class="token number">3</span><span class="token punctuation">:</span>on    <span class="token number">4</span><span class="token punctuation">:</span>off   <span class="token number">5</span><span class="token punctuation">:</span>on    <span class="token number">6</span><span class="token punctuation">:</span>off</code></pre>
+<p>到此，安装配置完毕，重新启动vsftpd服务</p>
+<pre class=" language-javascript"><code class="language-javascript">service vsftpd restart</code></pre>
+<p>设置到此结束。</p>
+<p>、关于FTP的安装与调试，详细参考阿里云官方教程。</p>
+<h1 id="Apache虚拟主机设置"><a href="#Apache虚拟主机设置" class="headerlink" title="Apache虚拟主机设置"></a>Apache虚拟主机设置</h1><p>找到根目录下httpd.conf文件，打开并将</p>
+<pre class=" language-javascript"><code class="language-javascript">#Virtual hosts</code></pre>
+<p>下的</p>
+<pre class=" language-javascript"><code class="language-javascript">#Include conf<span class="token operator">/</span>extra<span class="token operator">/</span>httpd<span class="token operator">-</span>vhosts<span class="token punctuation">.</span>conf</code></pre>
+<p>前面的#去掉，开启了httpd-vhosts虚拟主机文件。<br>在hosts文件中增加IP 127.0.0.2 ，并且更改对应的域名..<br>然后….重启Apache<br>在httpd-vhosts.conf设置如下…</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>VirtualHost <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">80</span><span class="token operator">></span>
+ServerAdmin webmaster@dummy<span class="token operator">-</span>host<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com
+DocumentRoot “目录”
+ServerName 9bie<span class="token punctuation">.</span>org
+ServerAlias blog<span class="token punctuation">.</span>9bie<span class="token punctuation">.</span>org
+ErrorLog “logs<span class="token operator">/</span>dummy<span class="token operator">-</span>host<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com<span class="token operator">-</span>error_log”
+CustomLog “logs<span class="token operator">/</span>dummy<span class="token operator">-</span>host<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com<span class="token operator">-</span>access_log” common
+<span class="token operator">&lt;</span><span class="token operator">/</span>VirtualHost<span class="token operator">></span><span class="token operator">&lt;</span>VirtualHost <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.2</span><span class="token punctuation">:</span><span class="token number">80</span><span class="token operator">></span>
+ServerAdmin webmaster@dummy<span class="token operator">-</span>host2<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com
+DocumentRoot “目录”
+ServerName www<span class="token punctuation">.</span>0page<span class="token punctuation">.</span>cn
+ServerAlias 0page<span class="token punctuation">.</span>cn
+ErrorLog “logs<span class="token operator">/</span>dummy<span class="token operator">-</span>host2<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com<span class="token operator">-</span>error_log”
+CustomLog “logs<span class="token operator">/</span>dummy<span class="token operator">-</span>host2<span class="token punctuation">.</span>example<span class="token punctuation">.</span>com<span class="token operator">-</span>access_log” common
+DirectoryIndex index<span class="token punctuation">.</span>html index<span class="token punctuation">.</span>php
+<span class="token operator">&lt;</span>Directory “目录”<span class="token operator">></span>
+Options FollowSymLinks
+AllowOverride None
+Order deny<span class="token punctuation">,</span>allow
+Allow <span class="token keyword">from</span> all
+<span class="token operator">&lt;</span><span class="token operator">/</span>Directory<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>VirtualHost<span class="token operator">></span></code></pre>
+<p>结果很呵呵！！！</p>
+<p>解决方法：<br>2个</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>VirtualHost<span class="token operator">></span><span class="token operator">&lt;</span><span class="token operator">/</span>VirtualHost<span class="token operator">></span></code></pre>
+<p>设置之间都加入下面设置，之后重启Apache即可</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>Directory “目录”<span class="token operator">></span>
+Options FollowSymLinks
+AllowOverride None
+Order deny<span class="token punctuation">,</span>allow
+Allow <span class="token keyword">from</span> all
+<span class="token operator">&lt;</span><span class="token operator">/</span>Directory<span class="token operator">></span></code></pre>
+<h1 id="2017-1月漏洞修复总结"><a href="#2017-1月漏洞修复总结" class="headerlink" title="2017/1月漏洞修复总结"></a>2017/1月漏洞修复总结</h1><p>1.mageMagick压缩TIFF图片远程代码执行漏洞（CVE-2016-8707）</p>
+<p>解决方法是升级到ImageMagick最新版本（官方给出的是7.0.4-3版本），我以我的centos6.5为例，首先下载新版文件的rpm包</p>
+<pre class=" language-javascript"><code class="language-javascript">wget http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>www<span class="token punctuation">.</span>imagemagick<span class="token punctuation">.</span>org<span class="token operator">/</span>download<span class="token operator">/</span>linux<span class="token operator">/</span>CentOS<span class="token operator">/</span>x86_64<span class="token operator">/</span>ImageMagick<span class="token number">-7.0</span><span class="token punctuation">.</span><span class="token number">4</span><span class="token operator">-</span><span class="token number">3</span><span class="token punctuation">.</span>x86_64<span class="token punctuation">.</span>rpm</code></pre>
+<p>之后安装</p>
+<pre class=" language-javascript"><code class="language-javascript">yum install ImageMagick</code></pre>
+<p>这样漏洞就解决了23333</p>
+<p>2.wordpress后台插件更新模块任意目录遍历导致DOS漏洞</p>
+<p>这个漏洞文件路径为/yjdata/www/www/wp-admin/includes/ajax-actions.php</p>
+<p>实际上WordPress4.6.1及以上版本已经解决了这个漏洞，之前我是懒得改2333…所以今天升级4.7版本就OK了。</p>
+<p>当然也有4.5.4版本的解决方案：编辑/wp-admin/includes/ajax-actions.php</p>
+<p>找到</p>
+<pre class=" language-javascript"><code class="language-javascript">$plugin <span class="token operator">=</span> <span class="token function">urldecode</span><span class="token punctuation">(</span> $_POST<span class="token punctuation">[</span><span class="token string">'plugin'</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>在其后面添加</p>
+<pre class=" language-javascript"><code class="language-javascript">$plugin <span class="token operator">=</span> <span class="token function">plugin_basename</span><span class="token punctuation">(</span> <span class="token function">sanitize_text_field</span><span class="token punctuation">(</span> <span class="token function">wp_unslash</span><span class="token punctuation">(</span> $_POST<span class="token punctuation">[</span><span class="token string">'plugin'</span><span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>对于4.5.4以下版本的解决方案，除了上述，还要在/wp-admin/includes/ajax-actions.php中，找到</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">is_wp_error</span><span class="token punctuation">(</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors <span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors<span class="token operator">-</span><span class="token operator">></span><span class="token function">get_error_code</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$status<span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span> <span class="token operator">=</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors<span class="token operator">-</span><span class="token operator">></span><span class="token function">get_error_message</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">// An unhandled error occured</span>
+$status<span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">__</span><span class="token punctuation">(</span> <span class="token string">'Plugin update failed.'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>修改为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">is_wp_error</span><span class="token punctuation">(</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors <span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors<span class="token operator">-</span><span class="token operator">></span><span class="token function">get_error_code</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$status<span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span> <span class="token operator">=</span> $wp_filesystem<span class="token operator">-</span><span class="token operator">></span>errors<span class="token operator">-</span><span class="token operator">></span><span class="token function">get_error_message</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">// An unhandled error occured</span>
+$status<span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">__</span><span class="token punctuation">(</span> <span class="token string">'Plugin update failed.'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>还要将</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span> $plugin_update_data <span class="token operator">===</span> <span class="token boolean">true</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>修改为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span> $plugin_update_data <span class="token operator">===</span> <span class="token boolean">true</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$status<span class="token punctuation">[</span><span class="token string">'error'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">__</span><span class="token punctuation">(</span> <span class="token string">'Plugin update failed.'</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">wp_send_json_error</span><span class="token punctuation">(</span> $status <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>所以讲道理升级到最新版就OK了，何必这么费事…..</p>
+<p>3.WordPress IP验证不当漏洞</p>
+<p>这个漏洞搞不清它的危险性，因为我这种小站就算SSRF攻击也毫无意义啊！！这个漏洞早在8月份就有修复但是没有记录下来，这里补上…</p>
+<p>找到wp-includes/http.php，找到这条代码</p>
+<pre class=" language-javascript"><code class="language-javascript">$same_host <span class="token operator">=</span> <span class="token function">strtolower</span><span class="token punctuation">(</span> $parsed_home<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span> <span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token function">strtolower</span><span class="token punctuation">(</span> $parsed_url<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>修改为</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isset</span><span class="token punctuation">(</span>$parsed_home<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ $same_host <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token function">strtolower</span><span class="token punctuation">(</span>$parsed_home<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token function">strtolower</span><span class="token punctuation">(</span>$parsed_url<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token string">'localhost'</span> <span class="token operator">===</span> <span class="token function">strtolower</span><span class="token punctuation">(</span>$parsed_url<span class="token punctuation">[</span><span class="token string">'host'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+ $same_host <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>另外要看看这段代码</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token number">127</span> <span class="token operator">===</span> $parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token number">10</span> <span class="token operator">===</span> $parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token number">0</span> <span class="token operator">===</span> $parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+<p>如果是这样就说明没问题，但老版本WordPress没有最后那个</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">||</span> <span class="token number">0</span> <span class="token operator">===</span> $parts<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span></code></pre>
+<p>需要手动补上<br>到此，漏洞修复完毕</p>
+<h1 id="关于WordPress文章摘要字数与字体问题"><a href="#关于WordPress文章摘要字数与字体问题" class="headerlink" title="关于WordPress文章摘要字数与字体问题"></a>关于WordPress文章摘要字数与字体问题</h1><p>升级了WordPress4.7，感觉和之前版本有很大不同！当然换了新版本，还是要改一下文章摘要代码的，我也习惯了这种方法：</p>
+<p>修改formating.php，找到</p>
+<pre class=" language-javascript"><code class="language-javascript">$excerpt_length <span class="token operator">=</span> <span class="token function">apply_filters</span><span class="token punctuation">(</span> <span class="token string">'excerpt_length'</span><span class="token punctuation">,</span> <span class="token number">55</span> <span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>将55改成想要的数值即可</p>
+<p>可是我根据这种方法，利用winscp第一次修改完居然错误500了！！而且网上找不到解决方案…后来一想可能是formating.php出了问题，就拿4.5.3版本的备份文件换了一下，好了…但是却无法显示♂这样的字符！！这是什么鬼？</p>
+<p>这里我检查了一下，发现应该下载下来编辑的formating.php并没有找到，也就是说最初winscp传输并不成功，导致文件缺失….</p>
+<p>可是依然没有找到解决方法，所以重新换了文件，这下可以正常显示了…重新操作修改数值，发现数值更改之后依然不能显示♂这样的字符，也许是新版本在这方面改动较大…考虑到之前的情况，准备换一种方法</p>
+<p>修改主题functions.php文件</p>
+<p>加入</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">chinese_excerpt</span><span class="token punctuation">(</span>$text<span class="token punctuation">,</span> $lenth<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+$text <span class="token operator">=</span> <span class="token function">mb_substr</span><span class="token punctuation">(</span>$text<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span> $lenth<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> $text<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token function">add_filter</span><span class="token punctuation">(</span><span class="token string">'the_excerpt'</span><span class="token punctuation">,</span> <span class="token string">' chinese_excerpt '</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>但是显示依然有问题…原来是这个要安装服务器打开php mb_string扩展，操作如下：</p>
+<p>找到php.ini文件，将；extension=mbstring.so 前的；去掉即可，并重启服务器（Apache）</p>
+<p>但是有的并不是这样，可以参考这篇文章进行设置linux系统下php安装mbstring扩展的二种方法</p>
+<p>这样就OK了，但是♂依然是怎么说呢，图片….但是后来查了一下WordPress4.6版本开始使用原生字体，中文Windows系统下，Segoe UI字体将会退回到微软雅黑或者宋体…所以这就不足为奇了</p>
+<p>所以要恢复的字符的话，应该去看看字体…</p>
+<h1 id="centos6-5-Apache的ssl配置"><a href="#centos6-5-Apache的ssl配置" class="headerlink" title="centos6.5+Apache的ssl配置"></a>centos6.5+Apache的ssl配置</h1><p>使用阿里云的免费证书，系统自动生成。由于我的网站一整套服务都是从阿里云购买的，域名备案之后使用云解析，在记录证书的时候可以自己记录，所以这一部分就跳过了。直接进入设置部分，我的是centos6.5+Apache。</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/0PAGE.jpg" alt="" loading="lazy"></p>
+<p>申请到证书之后自动做了txt记录，所以下载证书，之后创建一个cert目录于Apache安装目录之下，把下载下来的证书文件都放上去，然后开始做配置，这个配置是对于Apache安装目录中httpd-ssl.conf做的。</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/0page-1.jpg" alt="" loading="lazy"></p>
+<p>添加 SSL 协议支持协议，去掉不安全的协议，并修改加密套件（注意这个SSLCipherSuite一共有2个）</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/0page-2.jpg" alt="" loading="lazy"></p>
+<p>证书公钥配置，就是放证书对应的那个文件的路径。其他配置也同理，注意把前面#删了</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/0page-3.jpg" alt="" loading="lazy"></p>
+<p>证书私钥配置和证书链配置，也是放路径….</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/0page-5.jpg" alt="" loading="lazy"></p>
+<p>然后就是站点的信息配置了，网站目录和域名。<br>接下来，配置httpd.conf文件，把下面2个的#去掉</p>
+<pre class=" language-javascript"><code class="language-javascript">#LoadModule ssl_module modules<span class="token operator">/</span>mod_ssl<span class="token punctuation">.</span>so <span class="token punctuation">(</span>如果找不到请确认是否编译过 openssl 插件<span class="token punctuation">)</span>
+#Include conf<span class="token operator">/</span>extra<span class="token operator">/</span>httpd<span class="token operator">-</span>ssl<span class="token punctuation">.</span>conf</code></pre>
+<p>以上，配置完保存之后，重启Apache….<br>但是我又遇到了这个问题，即在没有配置httpd-ssl.conf文件中站点目录时，访问是可以的</p>
+<p><img src="http://ocuytj5om.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE2.jpg" alt="" loading="lazy"></p>
+<p>而换成网站目录之后，就这样了…但是我的网站目录已经给了777权限了，而且和Apache一样都是root下的，<br>问了很多大佬改了很多次依然没有解决…<br><img src="http://ocuytj5om.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE1.jpg" alt="" loading="lazy"><br>即SSL安装和配置是没问题的，关于这方面也许是WordPress的原因，要改一下.htaccess文件…网上给的方案是在该文件中添加以下代码：</p>
+<pre class=" language-javascript"><code class="language-javascript">SecFilterEngine Off
+SecFilterScanPOST Off</code></pre>
+<p>但是添加之后会变成错误500，所以这根本不是.htaccess文件的问题…</p>
+<p>或者后台强制开https，即在wp-config文件中这一句</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token function">require_once</span><span class="token punctuation">(</span>ABSPATH <span class="token punctuation">.</span> ‘wp<span class="token operator">-</span>settings<span class="token punctuation">.</span>php’<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>下面加入</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token function">define</span><span class="token punctuation">(</span>‘FORCE_SSL_LOGIN’<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">define</span><span class="token punctuation">(</span>‘FORCE_SSL_ADMIN’<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>但是也失败了orz！本来就是个全站开启https的代码，我这样https访问都还没实现就这样搞肯定失败，但这也说明问题不在这里….<br>请求老师给看了一下，似乎是PHP那边的问题，即不能指向index.php，但是由于站点伪静态，其他页面都是可以在https下访问的！又检查了PHP设置，Apache自身设置等，都没有问题！但由于时间关系没有解决….我自己刚才又重新对比httpd.conf和httpd-ssl.conf文件，发现前者多出来一句…于是在httpd-ssl.conf文件的<code>&lt;VirtualHost&gt;</code>下添加这句代码</p>
+<pre class=" language-javascript"><code class="language-javascript">DirectoryIndex index<span class="token punctuation">.</span>php</code></pre>
+<p>重启Apache就可以https访问了</p>
+<p>当然我没有开启全站https，因为懒，也免得让大家改友链了</p>
+<p>但是！我这里不得不吐槽！之前我去找老师的时候，那一句就有，就是说当时httpd-ssl.conf文件在一段时间内的设置是和现在完全相同的，不过那个时候还是无法https访问，后来检查也是没毛病，也不知道为什么刚才再这样设置反而成功了orz….虽然不能说完全成功，用火狐浏览器要刷新多次才能https访问（小绿锁=403，小黄锁=可以访问）毕竟没有开启全站https，混用应该会有点bug的</p>
+<p>最后还是建议不管在是否有装过配置环境，下次再配置ssl之前还是强制重新来装一次环境吧，免得忽略了什么，即这2条指令</p>
+<pre class=" language-javascript"><code class="language-javascript">yum install openssl
+yum install mod_ssl</code></pre>
+<p>直到最后才证明是ssl证书生效问题….还有浏览器是否自动阻止不被认可的ssl证书的问题，总之安装不难，但能不能用还是要看证书质量。</p>
+<h1 id="对恶心爬虫YisouSpider的屏蔽"><a href="#对恶心爬虫YisouSpider的屏蔽" class="headerlink" title="对恶心爬虫YisouSpider的屏蔽"></a>对恶心爬虫YisouSpider的屏蔽</h1><p>前几天七牛云的流量似乎被刷，于是就去查记录了，结果发现了奇怪的IP，基本上都是这一个IP在刷，ping过之后发现是阿里云的，通过访问测试，确定是一台专门用来跑程序的服务器。所以接下来确定是什么人在跑什么程序就好，通过日志来看是在爬本站的图片外链，应该是个蜘蛛什么的…之后我在后台统计发现了这个<br>YisouSpider…所以不用说了，接下来就是去屏蔽这些了，我最先采用的办法就是在.htaccess文件中添加屏蔽IP的语句，即</p>
+<pre class=" language-javascript"><code class="language-javascript">Deny <span class="token keyword">from</span> <span class="token number">140.205</span><span class="token punctuation">.</span><span class="token number">31.90</span></code></pre>
+<p>但是之后过了一天查看统计记录，还是有YisouSpider的访问记录，毕竟对于这种恶心程序，一定是分布式服务器集群扫描，所以禁了一个ip，就会换个ip继续扫。因此，尝试另一种简单方法，即在robots.txt加入屏蔽语句，也就是</p>
+<pre class=" language-javascript"><code class="language-javascript">User<span class="token operator">-</span>agent<span class="token punctuation">:</span> YisouSpider
+Disallow<span class="token punctuation">:</span> <span class="token operator">/</span></code></pre>
+<p>将robots.txt文件放入网站根目录即可，可是从网上的一些反馈看，似乎YisouSpider会无视robots.txt的规则….似乎Nginx设置里直接禁掉的方法比较多，但我是Apache2333。<br>后来从<a href="http://cnzhx.net/blog/ban-some-bad-spiders/" target="_blank" rel="noopener">http://cnzhx.net/blog/ban-some-bad-spiders/</a><br>这里找到了一个解决方法，即使用Apache的mod_rewrite和mod_setenvif组件来屏蔽这个爬虫。虽然官方文档说这可以在Apache的配置文件中配置，但查看了一下.htaccess文件还是放到这里了，毕竟这里的mod_rewrite组件是一直被使用的（废话）。</p>
+<p>为了多重保险，在mod_rewrite组件中加入</p>
+<pre class=" language-javascript"><code class="language-javascript">RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_URI<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">^</span><span class="token operator">/</span>robots\<span class="token punctuation">.</span>txt$
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_URI<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">^</span><span class="token operator">/</span>error\<span class="token punctuation">.</span>html$
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>HTTP_USER_AGENT<span class="token punctuation">}</span> EasouSpider <span class="token punctuation">[</span>NC<span class="token punctuation">,</span>OR<span class="token punctuation">]</span>
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>HTTP_USER_AGENT<span class="token punctuation">}</span> YisouSpider <span class="token punctuation">[</span>NC<span class="token punctuation">,</span>OR<span class="token punctuation">]</span>
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>HTTP_USER_AGENT<span class="token punctuation">}</span> Sogou\ web\ spider <span class="token punctuation">[</span>NC<span class="token punctuation">]</span>
+RewriteRule <span class="token operator">^</span><span class="token punctuation">.</span><span class="token operator">*</span>$ – <span class="token punctuation">[</span>F<span class="token punctuation">,</span>L<span class="token punctuation">]</span></code></pre>
+<p>在mod_setenvif（这个实际上是后来整体加的）写入屏蔽代码即可，鉴于在.htaccess文件中加入<code>&lt;Location/&gt;&lt;/Location&gt;</code>标签会导致全站错误500，我更改代码并添加部分应该屏蔽的恶心UA，测试成功为：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>IfModule mod_setenvif<span class="token punctuation">.</span>c<span class="token operator">></span>
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “EasouSpider” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “YisouSpider” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “LinksCrawler” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “EtaoSpider” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “LinksCrawler” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “linkdex<span class="token punctuation">.</span>com” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “rogerbot” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “AskTbPTV” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “brandwatch” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “FeedDemon” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “BOT<span class="token operator">/</span><span class="token number">0.1</span> <span class="token punctuation">(</span>BOT <span class="token keyword">for</span> JCE<span class="token punctuation">)</span>” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “Java” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “Jullo” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “ApacheBench” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “Swiftbot” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “WinHttp” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “HttpClient” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “jaunty” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “Microsoft URL Control” bad_bot
+SetEnvIfNoCase User<span class="token operator">-</span>Agent “Python<span class="token operator">-</span>urllib” bad_bot
+
+<span class="token operator">&lt;</span>IfModule <span class="token operator">!</span>mod_authz_core<span class="token punctuation">.</span>c<span class="token operator">></span>
+Order Allow<span class="token punctuation">,</span>Deny
+Allow <span class="token keyword">from</span> all
+Deny <span class="token keyword">from</span> env<span class="token operator">=</span>bad_bot
+<span class="token operator">&lt;</span><span class="token operator">/</span>IfModule<span class="token operator">></span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>IfModule<span class="token operator">></span></code></pre>
+<p>这一段代码引用如上，这里不多做解释。另外从<a href="https://zhangge.net/4458.html也找到了类似的解决方法，其设置原理同上虽然增加了对httpd.conf的设置，但这一步就不用了，这里引用并修改它的PHP代码，放到网站入口文index.php中的第一个" target="_blank" rel="noopener">https://zhangge.net/4458.html也找到了类似的解决方法，其设置原理同上虽然增加了对httpd.conf的设置，但这一步就不用了，这里引用并修改它的PHP代码，放到网站入口文index.php中的第一个</a> &lt;?php 之后即可（我并没有用，这里仅做代码修改与发布）</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token comment" spellcheck="true">//获取UA信息</span>
+$ua <span class="token operator">=</span> $_SERVER<span class="token punctuation">[</span>‘HTTP_USER_AGENT’<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//将恶意USER_AGENT存入数组</span>
+$now_ua <span class="token operator">=</span> <span class="token function">array</span><span class="token punctuation">(</span>‘FeedDemon ‘<span class="token punctuation">,</span>’BOT<span class="token operator">/</span><span class="token number">0.1</span> <span class="token punctuation">(</span>BOT <span class="token keyword">for</span> JCE<span class="token punctuation">)</span>’<span class="token punctuation">,</span>’CrawlDaddy ‘<span class="token punctuation">,</span>’Java’<span class="token punctuation">,</span>’Feedly’<span class="token punctuation">,</span>’UniversalFeedParser’<span class="token punctuation">,</span>’linkdex<span class="token punctuation">.</span>com’<span class="token punctuation">,</span>’rogerbot’<span class="token punctuation">,</span>’LinksCrawler’<span class="token punctuation">,</span>’ApacheBench’<span class="token punctuation">,</span>’Swiftbot’<span class="token punctuation">,</span>’ZmEu’<span class="token punctuation">,</span>’Indy Library’<span class="token punctuation">,</span>’oBot’<span class="token punctuation">,</span>’jaunty’<span class="token punctuation">,</span>’YandexBot’<span class="token punctuation">,</span>’AhrefsBot’<span class="token punctuation">,</span>’MJ12bot’<span class="token punctuation">,</span>’WinHttp’<span class="token punctuation">,</span>’EasouSpider’<span class="token punctuation">,</span>’HttpClient’<span class="token punctuation">,</span>’Microsoft URL Control’<span class="token punctuation">,</span>’YYSpider’<span class="token punctuation">,</span>’jaunty’<span class="token punctuation">,</span>’YisouSpider’<span class="token punctuation">,</span>’Python<span class="token operator">-</span>urllib’<span class="token punctuation">,</span>’AskTbPTV’<span class="token punctuation">,</span>’lightDeckReports Bot’<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//禁止空USER_AGENT，dedecms等主流采集程序都是空USER_AGENT，部分sql注入工具也是空USER_AGENT</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>$ua<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token function">header</span><span class="token punctuation">(</span>“Content<span class="token operator">-</span>type<span class="token punctuation">:</span> text<span class="token operator">/</span>html<span class="token punctuation">;</span> charset<span class="token operator">=</span>utf<span class="token number">-8</span>”<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">die</span><span class="token punctuation">(</span>‘请勿采集本站，因为采集的站长木有小JJ！’<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+<span class="token function">foreach</span><span class="token punctuation">(</span>$now_ua <span class="token keyword">as</span> $value <span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//判断是否是数组中存在的UA</span>
+<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">eregi</span><span class="token punctuation">(</span>$value<span class="token punctuation">,</span>$ua<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token function">header</span><span class="token punctuation">(</span>“Content<span class="token operator">-</span>type<span class="token punctuation">:</span> text<span class="token operator">/</span>html<span class="token punctuation">;</span> charset<span class="token operator">=</span>utf<span class="token number">-8</span>”<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">die</span><span class="token punctuation">(</span>‘请勿采集本站，因为采集的站长木有小JJ！’<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="Nginx配置虚拟主机"><a href="#Nginx配置虚拟主机" class="headerlink" title="Nginx配置虚拟主机"></a>Nginx配置虚拟主机</h1><p>重装系统之后换成了Nginx。由于使用的lnmp包是第三方的，所以设置起来比较蛋疼（实际上参考之前Apache这样的设置，关键点还是在于配置文件的合理位置，只要找到位置就好说了）….为什么要这样做？因为9bie.org这个域名要从我这里跳转啊….</p>
+<p>关于配置虚拟主机是为了实现多站点部署，推荐在vhosts目录下添加配置文件来做，具体配置方法如下：</p>
+<p>1.在www目录下创建站点目录</p>
+<p>2.到Nginx的目录下，配置nginx.conf文件开启虚拟主机设置（把include前面的#去掉即可），这里要注意一下vhosts目录路径</p>
+<pre class=" language-javascript"><code class="language-javascript">include <span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>nginx<span class="token operator">/</span>vhosts<span class="token operator">/</span><span class="token operator">*</span><span class="token punctuation">.</span>conf<span class="token punctuation">;</span></code></pre>
+<p>如上所示，在nginx目录下新建一个vhosts目录（如果原本没有此目录的话）</p>
+<p>3.在vhosts目录下新建一个.conf的配置文件，文件名以方便记忆为准，之后写入：</p>
+<pre class=" language-javascript"><code class="language-javascript">server <span class="token punctuation">{</span>
+
+listen <span class="token number">80</span><span class="token punctuation">;</span>
+
+server_name 域名 （带和不带www）<span class="token punctuation">;</span>
+location <span class="token operator">/</span> <span class="token punctuation">{</span>
+
+root 站点目录<span class="token punctuation">;</span>
+
+index index<span class="token punctuation">.</span>php index<span class="token punctuation">.</span>html index<span class="token punctuation">.</span>htm<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+error_page <span class="token number">500</span> <span class="token number">502</span> <span class="token number">503</span> <span class="token number">504</span> <span class="token operator">/</span>50x<span class="token punctuation">.</span>html<span class="token punctuation">;</span>
+
+location <span class="token operator">=</span> <span class="token operator">/</span>50x<span class="token punctuation">.</span>html <span class="token punctuation">{</span>
+
+root <span class="token operator">/</span>usr<span class="token operator">/</span>share<span class="token operator">/</span>nginx<span class="token operator">/</span>html<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+# pass the PHP scripts to FastCGI server listening on <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9000</span>
+
+location <span class="token operator">~</span> <span class="token punctuation">.</span>php$ <span class="token punctuation">{</span>
+
+fastcgi_pass <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token punctuation">:</span><span class="token number">9000</span><span class="token punctuation">;</span>
+
+fastcgi_index index<span class="token punctuation">.</span>php<span class="token punctuation">;</span>
+
+fastcgi_param SCRIPT_FILENAME 站点目录$fastcgi_script_name<span class="token punctuation">;</span>
+
+include fastcgi_params<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+
+location <span class="token operator">~</span> <span class="token operator">/</span><span class="token punctuation">.</span>ht <span class="token punctuation">{</span>
+
+deny all<span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>4.根据自己的情况写入配置就好，之后重启nginx：</p>
+<pre class=" language-javascript"><code class="language-javascript">cd <span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>nginx<span class="token regex">/sbin/</span>
+
+<span class="token punctuation">.</span><span class="token operator">/</span>nginx <span class="token operator">-</span>s reload</code></pre>
+<p>5.在站点目录下放个index.html测试一下</p>
+<p>关于其他配置方法也有很多，如直接在nginx.conf文件中进行配置…但对于第三方包来说比较折腾…上述方法在CSDN上可以找到更详细具体的配置说明与实例。写这篇文章仅仅是低端水文章罢了……</p>
+<h1 id="关于网站被黑及相关处理"><a href="#关于网站被黑及相关处理" class="headerlink" title="关于网站被黑及相关处理"></a>关于网站被黑及相关处理</h1><p>某文章被改，而且查记录还被挂上了黑页….拜访一下邻居，夏娜酱似乎也遇到了同样的状况。<br>首先分析一下，我使用的WordPress版本是4.7，上个月就有收到阿里云的短信提示，说待修复漏洞（Wordpress &gt;=4.7 wp-json User Enumeration Exploit和wordpress SQL Injection）….查了一下似乎有更严重的问题，即影响WordPres4.7和WordPress4.7.1的0day，相关报道：</p>
+<p><a href="http://www.msnzz.com/msn_58332_1_1.html" target="_blank" rel="noopener">http://www.msnzz.com/msn_58332_1_1.html</a></p>
+<p><a href="http://bingodu.com/news/494267.html" target="_blank" rel="noopener">http://bingodu.com/news/494267.html</a></p>
+<p>接下来我用（lang）了（fei）一个下午的时间来检查代码，并没有发现后门什么的，按照描述的情况，应该可以确定是哪个0day了…下载WordPress4.7.2，手动更新，基本上就解决了漏洞问题。</p>
+<p>之后，连接服务器，看看有没有什么异样，从一般的命令查询结果上看是没什么问题的<br>但是某记录似乎是被扫描器扫了，查ip还是阿里云（肉鸡？）…而且居然2w多条记录…这就有趣了。</p>
+<p>进一步检查服务器，并没有发现有成功被入侵，为了以防万一，从ssh等设置到蜜罐搭建…关于服务器的安全设置，还是喜欢第三方的软件，另外别作死用winscp乱改，不然会和我一样出事故（编码格式是个玄学问题！！）。因此对于相关文章也是作为参考就好，仅仅是作为参考（毕竟我也是小白，隔行如隔山）</p>
+<p>centos 安全设置</p>
+<p><a href="http://www.dzbfsj.com/forum.php?mod=viewthread&amp;tid=3476" target="_blank" rel="noopener">http://www.dzbfsj.com/forum.php?mod=viewthread&amp;tid=3476</a></p>
+<p>CentOS6.7搭建蜜罐dionaea</p>
+<p><a href="http://www.cnblogs.com/xkops/p/5672810.html" target="_blank" rel="noopener">http://www.cnblogs.com/xkops/p/5672810.html</a></p>
+<p>另外千万千万别拿winscp乱玩！！该用vim操作的就别从本地搞…..</p>
+<h1 id="灵梦-amp-魔理沙のBlog萌化"><a href="#灵梦-amp-魔理沙のBlog萌化" class="headerlink" title="灵梦&amp;魔理沙のBlog萌化"></a>灵梦&amp;魔理沙のBlog萌化</h1><p>把博客的背景换成了主角组的壁纸（也是我和cp的头像..），所以突发奇想想在此之上，给灵梦添加一只Q版魔理沙，魔理沙添加一只Q版灵梦，并点击之后可以自动播放自己的角色曲（bgm？）所以这个设置是分2步走的，第一步是找到素材并安放；第二部是使其具有播放bgm的能力。</p>
+<p>首先在此之前要先找素材，我就自己抠图了…</p>
+<p>对于第一步，这里直接引用泽泽菊苣的坑，更换一下素材地址就行。</p>
+<p>传送门：<a href="https://qqdie.com/archives/left-right-rem-rahm-top-to-bottom-source.html" target="_blank" rel="noopener">https://qqdie.com/archives/left-right-rem-rahm-top-to-bottom-source.html</a></p>
+<p>对于第二步，点击之后让其播放自己的bgm…这一点我根本不会，因为没学过jq，后来在@政府机构的帮助下解决了这个问题。</p>
+<p>在泽泽这个文档中有一个js（ud.js）是负责回应被点击之后的事件，所以只要在这里对应的地方补充绑定的事件就好。先建立新的audio，</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> mp4 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Audio</span><span class="token punctuation">(</span>“http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>www<span class="token punctuation">.</span>0page<span class="token punctuation">.</span>org<span class="token operator">/</span>wp<span class="token operator">-</span>content<span class="token operator">/</span>uploads<span class="token operator">/</span><span class="token number">2017</span><span class="token operator">/</span><span class="token number">04</span><span class="token operator">/</span>Anno<span class="token operator">-</span>Satori<span class="token operator">-</span>少女綺想曲<span class="token operator">-</span>～<span class="token operator">-</span>Dream<span class="token operator">-</span>Battle<span class="token punctuation">.</span>mp3”<span class="token punctuation">)</span><span class="token punctuation">;</span>
+mp4<span class="token punctuation">.</span>preload <span class="token operator">=</span> “auto”<span class="token punctuation">;</span>
+<span class="token keyword">var</span> mp3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Audio</span> <span class="token punctuation">(</span>‘http<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>www<span class="token punctuation">.</span>0page<span class="token punctuation">.</span>org<span class="token operator">/</span>wp<span class="token operator">-</span>content<span class="token operator">/</span>uploads<span class="token operator">/</span><span class="token number">2017</span><span class="token operator">/</span><span class="token number">04</span><span class="token operator">/</span>Anno<span class="token operator">-</span>Satori<span class="token operator">-</span>恋色マスタースパーク<span class="token punctuation">.</span>mp3’<span class="token punctuation">)</span><span class="token punctuation">;</span>
+mp3<span class="token punctuation">.</span>preload <span class="token operator">=</span> “auto”<span class="token punctuation">;</span></code></pre>
+<p>之后在对应的事件绑定的地方写入对应代码就行，一定要写到return前面！！！！</p>
+<p>魔理沙的：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>mp3<span class="token punctuation">.</span>paused<span class="token punctuation">)</span><span class="token punctuation">{</span>mp3<span class="token punctuation">.</span><span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>mp3<span class="token punctuation">.</span><span class="token function">pause</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>灵梦的：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>mp4<span class="token punctuation">.</span>paused<span class="token punctuation">)</span><span class="token punctuation">{</span>mp4<span class="token punctuation">.</span><span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>mp4<span class="token punctuation">.</span><span class="token function">pause</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>然而经过测测试，似乎判断语句完全没用…即点几下，音乐就同时开始几次…然而是单次播放…我分析是因为没用指定具体的图片所以才导致一直播放…于是乎，把代码原封不动的复制到DW里然后重新保存一个同名js文件，上传，再测试，好了….</p>
+<p>毕竟这种玄学问题经常遇到也见怪不怪了….</p>
+<h1 id="Linux内核漏洞修复与吐槽"><a href="#Linux内核漏洞修复与吐槽" class="headerlink" title="Linux内核漏洞修复与吐槽"></a>Linux内核漏洞修复与吐槽</h1><p> 爆出了Linux内核漏洞，然呢坑爹的阿里云却没有公告提醒！！！这一点真比不上腾讯。</p>
+<p>腾讯公告：<a href="http://bbs.qcloud.com/thread-33227-1-1.html" target="_blank" rel="noopener">http://bbs.qcloud.com/thread-33227-1-1.html</a></p>
+<p>所以就按着上述解决方法来了</p>
+<pre class=" language-javascript"><code class="language-javascript"># uname <span class="token operator">-</span>a
+Linux  <span class="token number">3.10</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token operator">-</span><span class="token number">514.6</span><span class="token punctuation">.</span><span class="token number">2</span><span class="token punctuation">.</span>el7<span class="token punctuation">.</span>x86_64 #<span class="token number">1</span> SMP Thu Feb <span class="token number">23</span> <span class="token number">03</span><span class="token punctuation">:</span><span class="token number">04</span><span class="token punctuation">:</span><span class="token number">39</span> UTC <span class="token number">2017</span> x86_64 x86_64 x86_64 GNU<span class="token operator">/</span>Linux</code></pre>
+<p>发现内核的确是受漏洞影响的，更新软件源、更新内核</p>
+<pre class=" language-javascript"><code class="language-javascript"># yum clean all <span class="token operator">&amp;&amp;</span> yum makecache
+
+# yum update kernel <span class="token operator">-</span>y</code></pre>
+<p>重启之后查看内核版本，已经是最新版的安全版本了</p>
+<pre class=" language-javascript"><code class="language-javascript"># uname <span class="token operator">-</span>r
+<span class="token number">3.10</span><span class="token punctuation">.</span><span class="token number">0</span><span class="token operator">-</span><span class="token number">514.26</span><span class="token punctuation">.</span><span class="token number">2</span><span class="token punctuation">.</span>el7<span class="token punctuation">.</span>x86_64</code></pre>
+<p>这里必须要吐槽的是如果不是某博友提示，或许还真不知道这个漏洞，因为阿里云根本就没有安全公告，并且搞不懂为什么阿里云要把漏洞公告全部整合到云盾态势感知的行业新闻里？？？查看之后发现近期（以阿里云漏洞信息发布日期为准）类似漏洞也不少，比如“Phoenix Talon” Linux内核漏洞等。。。。<br>而阿里云官方对于此类漏洞的建议就是使用 yum update kernel 或sudo apt-get update &amp;&amp; sudo apt-get upgrade升级内核，毕竟其中的大多数，官方都已经有修复了。。。。</p>
+<p>当然最近又爆了Apache httpd多个安全漏洞，解决方法也是升级，幸好我的apache一直是最新版。总之不得不说阿里云现在的服务真心不如腾讯云。</p>
+<h1 id="重建站点"><a href="#重建站点" class="headerlink" title="重建站点"></a>重建站点</h1><p>….主要是php5.4用起来太蛋疼了！而且centos7.x版本我还没有体验过，正好被centos6.5 的yum源坑了之后我就果断重装系统了，换成了centos7.2+PHP5.6，之后重新搭建博客导入数据库，用起来的确好多了！！当然也遇到了以下几个问题，但都解决了：</p>
+<p><strong>0.导入数据库大小限制</strong></p>
+<p>实际上博客媒体库的上传限制也是同一原因，找到php.ini并配置即可。重点在于post_max_size所限制的大小，它的数值决定你可上传/导入最大文件大小的数值</p>
+<p><strong>1.后台安装插件无法定位到wp-content</strong></p>
+<p>从网上查了很多文章似乎都让在wp-config.php文件中加入某段代码，但测试之后发现根本没用反而造成错误。</p>
+<p>因此只能土办法解决了：从WordPress.org下载插件，上传到插件目录手动安装</p>
+<p><strong>2.媒体库上传没有写入权限</strong></p>
+<p>给uploads文件夹777权限，并且勾选循环设定组、拥有者和权限</p>
+<p><strong>3.伪静态</strong></p>
+<p>要重新检查一下Apache的配置文件，确定LoadModule rewrite_module modules/mod_rewrite.so没用被注释掉即可。注意部分lamp包当中，modules部分是由另外的.conf文件分开管理的，不一定都在httpd.conf当中</p>
+<p>之后给在站点目录下创建 .htaccess，写入如下代码并重启httpd服务，之后在WordPress后台配置固定连接</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>IfModule mod_rewrite<span class="token punctuation">.</span>c<span class="token operator">></span>
+RewriteEngine On
+RewriteBase <span class="token operator">/</span>
+RewriteRule <span class="token operator">^</span>index\<span class="token punctuation">.</span>php$ <span class="token operator">-</span> <span class="token punctuation">[</span>L<span class="token punctuation">]</span>
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_FILENAME<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">-</span>f
+RewriteCond <span class="token operator">%</span><span class="token punctuation">{</span>REQUEST_FILENAME<span class="token punctuation">}</span> <span class="token operator">!</span><span class="token operator">-</span>d
+RewriteRule <span class="token punctuation">.</span> <span class="token operator">/</span>index<span class="token punctuation">.</span>php <span class="token punctuation">[</span>L<span class="token punctuation">]</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>IfModule<span class="token operator">></span></code></pre>
+<p><strong>4.ssl</strong></p>
+<p>参照：之前ssl配置</p>
+<p>另外关于ssl要提醒一下很多免费ssl（赛门铁克等）已经被谷歌和火狐ban了，原因众所周知。所以我打算之后找个合适的ssl证书再开启https。</p>
+<p><strong>5.ban掉恶心的爬虫</strong></p>
+<p>参照：之前ban掉爬虫</p>
+<h1 id="ECS漏洞修复"><a href="#ECS漏洞修复" class="headerlink" title="ECS漏洞修复"></a>ECS漏洞修复</h1><p>对于阿里云我只想说草泥马！！！现在漏洞咨询都扔在开发者论坛了，控制版面看都看不到！！！</p>
+<p>说一下今天具体的情况，早上8点多阿里云给短信通知说有漏洞，一开始没注意，因为那时在图书馆并且直到下午才回来，而回来之后想着修复漏洞，登录一看卧槽！！全是内核/组件漏洞，EXM？？？我不是升级过一次吗？？</p>
+<p>具体为：</p>
+<ul>
+<li><p>漏洞: RHSA-2017:1615: kernel security and bug fix update (Important)</p>
+</li>
+<li><p>漏洞: RHSA-2017:1100: nss and nss-util security update (Critical)</p>
+</li>
+<li><p>漏洞: RHSA-2017:1095: bind security update (Important)</p>
+</li>
+<li><p>漏洞: RHSA-2016:0459: bind security update (Important)</p>
+</li>
+<li><p>漏洞: RHSA-2015:1635: sqlite security update (Moderate)</p>
+</li>
+</ul>
+<p>分析：使用uname -a查看内核，应该是没问题的，所以可能是组件过低导致的漏洞</p>
+<p>解决：</p>
+<pre class=" language-javascript"><code class="language-javascript">yum update</code></pre>
+<p>大概花了10分钟</p>
+<p>重启之后用uname -r查内核，但是发现内核没变，再试一次提示已经是没有升级版本了。</p>
+<p>总之阿里云的体验越来越差了！！！！</p>
+</div><div id="reward-container"><span class="hty-icon-button button-glow" id="reward-button" title="打赏" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === &quot;none&quot;) ? &quot;block&quot; : &quot;none&quot;;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-hand-coin-line"></use></svg></span><div id="reward-comment">I am poor，please give me money</div><div id="qr" style="display:none;"><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Alipay.jpg" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Alipay.jpg" alt="支付宝" title="支付宝"></a><div><span style="color:#00A3EE"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-alipay-line"></use></svg></span></div></div><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/QQpay.png" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/QQpay.png" alt="QQ 支付" title="QQ 支付"></a><div><span style="color:#12B7F5"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-qq-line"></use></svg></span></div></div><div style="display:inline-block"><a href="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Wepay.png" target="_blank" rel="noopener"><img loading="lazy" src="http://liefenghexo.oss-cn-beijing.aliyuncs.com/others/Wepay.png" alt="微信支付" title="微信支付"></a><div><span style="color:#2DC100"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-wechat-pay-line"></use></svg></span></div></div></div></div><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>North Area</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://www.northarea.tech/0x000/" title="2016~2017阿里云ECS运维技术记录">https://www.northarea.tech/0x000/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul></section></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/1/" rel="prev" title="大一学年の手账"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">大一学年の手账</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2015-2011/" rel="next" title="2015及之前的黑历史（不要看！）"><span class="post-nav-text">2015及之前的黑历史（不要看！）</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div id="comment"><div class="comment-tooltip text-center"><span>本站启用GitHub Issues作为评论系统。</span><br><span>所以如果是重要的评论，建议跳转 GitHub Issues 发表。</span><br><span>若没有本文 Issue，您可以使用 Comment 模版新建。</span><br><a class="hty-button hty-button--raised" id="github-issues" href="https://github.com/liefeng/liefeng.github.io/issues?q=is:issue+2016~2017阿里云ECS运维技术记录" target="_blank" rel="noopener">GitHub Issues</a></div></div></main><footer class="sidebar-translate" id="footer"><div class="copyright"><span>&copy; 2016 – 2020 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> North Area</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v4.2.1</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v0.7.2</span></div><div class="live_time"><span>本博客已抽象+老年化地运行</span><span id="display_live_time"></span><span class="moe-text">👊👴👊</span><script>function blog_live_time() {
+  window.setTimeout(blog_live_time, 1000);
+  const start = new Date('2016-07-12T00:00:00');
+  const now = new Date();
+  const timeDiff = (now.getTime() - start.getTime());
+  const msPerMinute = 60 * 1000;
+  const msPerHour = 60 * msPerMinute;
+  const msPerDay = 24 * msPerHour;
+  const passDay = Math.floor(timeDiff / msPerDay);
+  const passHour = Math.floor((timeDiff % msPerDay) / 60 / 60 / 1000);
+  const passMinute = Math.floor((timeDiff % msPerHour) / 60 / 1000);
+  const passSecond = Math.floor((timeDiff % msPerMinute) / 1000);
+  display_live_time.innerHTML = " " + passDay + " 天 " + passHour + " 小时 " + passMinute + " 分 " + passSecond + " 秒";
+}
+blog_live_time();
+</script></div><div class="footer-custom-text">Hosted by <a href="https://github.com/" rel="noopener" target="_blank">Github Pages</a></div></footer><a class="hty-icon-button" id="goUp" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#343536" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script defer src="https://cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script><script defer src="https://cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script><script defer src="/js/search/algolia-search.js"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"></div><div class="algolia-results"><div id="algolia-stats"></div><div id="algolia-hits"></div><div class="algolia-pagination" id="algolia-pagination"></div></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="想要搜些什么？" value=""></div><div id="local-search-result"></div></div></div><script defer src="/js/utils.js"></script><script defer src="/js/hexo-theme-yun.js"></script></body></html>
