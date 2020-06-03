@@ -126,7 +126,7 @@ body::before {
   height: 100%;
   z-index: -1;
   opacity: 0.8;
-  background-image: url("https://i.pximg.net/img-master/img/2019/09/09/21/55/49/76705166_p0_master1200.jpg");
+  background-image: url("/image/76705166_p0_master1200.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1659,7 +1659,7 @@ td {
   left: 0;
   width: 20rem;
   background: #fff;
-  background-image: url("https://i.pximg.net/img-master/img/2017/04/24/00/00/01/62549319_p0_master1200.jpg");
+  background-image: url("/image/62549319_p0_master1200.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom 1rem center;
@@ -1911,7 +1911,7 @@ td {
   text-decoration: underline;
 }
 .search-popup {
-  background-image: url("https://i.pximg.net/img-master/img/2017/07/10/23/49/05/63807669_p0_master1200.jpg");
+  background-image: url("/image/76705166_p1_master1200.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
